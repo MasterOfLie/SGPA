@@ -16,7 +16,8 @@
     <div class="container-fluid p-4">
         <div class="container">
             <h1 class="mb-4">Criar Processo</h1>
-            <form th:action="@{/processos/criar}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/processos/editar}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="processoID" th:value="${processo.id}"/>
                 <div class="mb-2">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -33,11 +34,10 @@
                         <div class="tab-pane fade active show" id="dados" role="tabpanel">
                             <div class="row">
                                 <div class="col-6">
+                                    <label for="departamentoSelect" class="form-label mt-4">Departamento</label>
                                     <div>
-                                        <label for="departamentoSelect" class="form-label mt-4">Departamento</label>
                                         <select class="form-select" id="departamentoSelect" name="departamentoID" required>
-                                            <option value="" disabled selected>Selecione um departamento</option>
-                                            <option th:each="departamento : ${departamentos}" th:value="${departamento.id}" th:text="${departamento.nome}"></option>
+                                            <option th:each="departamento : ${departamentos}"  th:value="${departamento.id}" th:text="${departamento.nome}" th:selected="${processo.departamento.id == departamento.id}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -45,8 +45,7 @@
                                     <div>
                                         <label for="servicoSelect" class="form-label mt-4">Serviço</label>
                                         <select class="form-select" id="servicoSelect" name="servicoID" required>
-                                            <option value="" disabled selected>Selecione um serviço</option>
-                                            <option th:each="servico : ${servicos}" th:value="${servico.id}" th:text="${servico.nome}"></option>
+                                            <option  th:each="servico : ${servicos}" th:value="${servico.id}" th:text="${servico.nome}" th:selected="${processo.servicos.id == servico.id}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -55,15 +54,14 @@
                                 <div>
                                     <label for="usuarioSelect" class="form-label mt-4">Solicitante</label>
                                     <select class="form-select" id="usuarioSelect" name="usuarioID"  required>
-                                        <option value="" disabled selected>Selecione um solicitante</option>
-                                        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nome}" ></option>
+                                        <option th:value="${processo.requerente.id}" th:text="${processo.requerente.nome}" ></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div>
                                     <label for="descricaoProcesso" class="form-label mt-4">Descrição</label>
-                                    <textarea class="form-control" id="descricaoProcesso" rows="6" name="descricaoProcesso" required></textarea>
+                                    <textarea class="form-control" id="descricaoProcesso" rows="6" name="descricaoProcesso" th:value="${processo.descricao}" th:text="${processo.descricao}" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -71,6 +69,7 @@
                             <div>
                                 <label class="form-label mt-4">Selecione os Documentos</label>
                                 <input class="form-control" type="file" name="file" multiple>
+                                <li th:each="file : ${files}" th:text="${file.absoluteFile.name}" ></li>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="externo" role="tabpanel">
