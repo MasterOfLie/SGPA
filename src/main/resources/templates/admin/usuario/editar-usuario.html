@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-br">
+<head th:replace="~{layout :: head}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="layout :: tituloPadrao">Usuário</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+</head>
+<body>
+<header th:replace="~{layout :: menu}"></header>
+
+<main>
+    <div class="container-fluid mt-3 p-5">
+        <div class="container">
+            <h1 class="mb-4">Editar Usuário</h1>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#profile" aria-selected="true" role="tab">Perfil</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="tab" href="#departamentos" aria-selected="false" role="tab" tabindex="-1">Departamentos</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="tab" href="#cargos" aria-selected="false" role="tab" tabindex="-2">Cargos</a>
+                </li>
+            </ul>
+            <form th:object="${usuario_editavel}" th:action="@{/admin/usuarios/atualizar}" method="post">
+                <div id="myTabContent" class="tab-content">
+                    <div class="d-flex justify-content-end p-2">
+                    <button type="submit" class="btn btn-primary">Atualizar Perfil</button></div>
+                    <div class="tab-pane fade" id="departamentos" role="tabpanel">
+                            <input type="hidden" th:field="*{id}" />
+                            <table id="listar-departamentos" class="table mt-2">
+                                <thead>
+                                <tr>
+                                    <th class="col-1" >Ativar Departamento</th>
+                                    <th class="col-8">Nome do Departamento</th>
+                                    <th class="col-3"></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th class="col-1">Ativar Departamento</th>
+                                    <th class="col-8">Nome do Departamento</th>
+                                    <th class="col-3"></th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr th:each="departamento : ${alldepartamentos}">
+                                    <td>
+                                        <div class="form-check mb-2 form-switch">
+                                            <input class="form-check-input" type="checkbox" th:id="${departamento.id}"
+                                                   th:name="departamentos"
+                                                   th:value="${departamento.id}"
+                                                   th:checked="${usuario_editavel.departamentos.contains(departamento)}" />
+                                        </div>
+                                    </td>
+                                    <td th:text="${departamento.nome}"></td>
+                                    <td>Editar Departamento</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                    <div class="tab-pane fade active show" id="profile" role="tabpanel">
+                            <input type="hidden" th:field="*{id}" />
+                            <div class="mb-3">
+                                <label for="id_fake" class="form-label">ID do Usuário</label>
+                                <input type="text" class="form-control" th:field="*{id}" id="id_fake" required maxlength="60" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Usuário</label>
+                                <input type="text" class="form-control" th:field="*{username}" id="username" name="username" required maxlength="60">
+                            </div>
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome do Usuário</label>
+                                <input type="text" class="form-control" th:field="*{nome}" id="nome" name="nome" required maxlength="60">
+                            </div>
+                        <legend class="mt-2">Status</legend>
+                        <div class="form-check mb-2 form-switch">
+                            <input class="form-check-input" type="checkbox" id="isEnabled" name="isEnabled" th:checked="*{isEnabled}" value="on"/>
+                            <label class="form-check-label" for="isEnabled">Usuário Ativo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="cargos" role="tabpanel">
+                    <input type="hidden" th:field="*{id}" />
+                        <legend class="mt-4">Cargos</legend>
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="role" id="role_admin" value="ADMIN" th:checked="${usuario_editavel.role.getRole() == 'admin'}" />
+                                <label class="form-check-label" for="role_admin">
+                                    Adminitrador - Acesso total ao sistema.
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="role" id="role_staff" value="STAFF" th:checked="${usuario_editavel.role.getRole() == 'staff'}" />
+                                <label class="form-check-label" for="role_staff">
+                                    Staff - Acesso ao Processos e Departamentos
+                                </label>
+                            </div>
+                            <div class="form-check ">
+                                <input class="form-check-input" type="radio" name="role" id="role_usuario" value="USUARIO" th:checked="${usuario_editavel.role.getRole() == 'usuario'}">
+                                <label class="form-check-label" for="role_usuario">
+                                    Usuario - Acesso aos processos proprios
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{layout :: rodape}"></footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#listar-departamentos').DataTable({
+            info: false,
+            ordering: true,
+            paging: true,
+            searching: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
+            }
+        });
+    });
+</script>
+</body>
+</html>

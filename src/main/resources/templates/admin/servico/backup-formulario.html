@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-br">
+<head th:replace="~{layout :: head}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="layout :: tituloPadrao">Servico</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+</head>
+<body>
+<header th:replace="~{layout :: menu}"></header>
+
+<main>
+    <div class="container-fluid mt-3 p-5">
+        <div class="container">
+            <h1 class="mb-4">Criar de Serviços</h1>
+            <form>
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome do Serviço</label>
+                    <input type="text" class="form-control" id="nome">
+                </div>
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição do Serviço</label>
+                    <input type="text" class="form-control" id="descricao">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+    </div>
+</main>
+
+<footer th:replace="~{layout :: rodape}"></footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#listar-departamentos').DataTable({
+            info: false,
+            ordering: true,
+            paging: true,
+            searching: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
+            }
+        });
+    });
+</script>
+</body>
+</html>

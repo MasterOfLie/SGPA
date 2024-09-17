@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-br">
+<head th:replace="~{layout :: head}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="layout :: tituloPadrao">Servico</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+</head>
+<body>
+<header th:replace="~{layout :: menu}"></header>
+
+<main>
+    <div class="container-fluid mt-3 p-5">
+        <div class="container">
+            <h1 class="mb-4">Editar de Departamento</h1>
+            <form th:action="@{/admin/departamento/editar}" th:object="${departamento}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                <div class="mb-3">
+                    <label for="id_fake" class="form-label">ID do Serviço</label>
+                    <input type="text" class="form-control" th:field="*{id}" id="id_fake"required maxlength="60" disabled>
+                </div>
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome do Serviço</label>
+                    <input type="text" class="form-control" th:field="*{nome}" id="nome" name="nome" required maxlength="60">
+                </div>
+                <legend class="mt-2">Status</legend>
+                <div class="form-check mb-2 form-switch">
+                    <input class="form-check-input" type="checkbox" id="isactive" name="isActive" th:checked="*{isActive}" value="on"/>
+                    <label class="form-check-label" for="isactive">Serviço Ativo</label>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{layout :: rodape}"></footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#listar-departamentos').DataTable({
+            info: false,
+            ordering: true,
+            paging: true,
+            searching: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
+            }
+        });
+    });
+</script>
+</body>
+</html>
