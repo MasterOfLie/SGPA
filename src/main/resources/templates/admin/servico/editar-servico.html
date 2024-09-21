@@ -16,7 +16,7 @@
     <div class="container-fluid mt-3 p-5">
         <div class="container">
             <h1 class="mb-4">Editar de Serviços</h1>
-            <form th:action="@{/admin/servico/editar}" th:object="${servico}" method="post">
+            <form th:action="@{/admin/servicos/editar}" th:object="${servico}" method="post">
                 <input type="hidden" th:field="*{id}" />
                 <div class="mb-3">
                     <label for="id_fake" class="form-label">ID do Serviço</label>

@@ -1,11 +1,15 @@
 package cloud.masteroflie.sgpa.service.impl;
 
+import cloud.masteroflie.sgpa.enums.RoleEnum;
+import cloud.masteroflie.sgpa.exception.ErroException;
 import cloud.masteroflie.sgpa.models.Departamento;
 import cloud.masteroflie.sgpa.models.Usuario;
 import cloud.masteroflie.sgpa.repository.DepartamentoRepository;
 import cloud.masteroflie.sgpa.repository.UserRepository;
 import cloud.masteroflie.sgpa.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,33 +52,32 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Void atualizarDepartamento(Usuario usuario, List<Long> departamentosID) {
-        if(departamentosID == null || departamentosID.isEmpty()){
-            Usuario usuarioAtualizado =  userRepository.findById(usuario.getId()).get();
-            usuarioAtualizado.setRole(usuario.getRole());
-            usuarioAtualizado.setNome(usuario.getNome());
-            usuarioAtualizado.setUsername(usuario.getUsername());
-            usuarioAtualizado.setEnabled(usuario.isEnabled());
-            usuarioAtualizado.setUsername(usuario.getUsername());
-            usuarioAtualizado.setDepartamentos(null);
-            userRepository.save(usuarioAtualizado);
-        }else {
-            Set<Departamento> novosDepartamentos = new HashSet<>();
-            Usuario usuarioAtualizado =  userRepository.findById(usuario.getId()).get();
-            usuarioAtualizado.setRole(usuario.getRole());
-            usuarioAtualizado.setNome(usuario.getNome());
-            usuarioAtualizado.setUsername(usuario.getUsername());
-            usuarioAtualizado.setEnabled(usuario.isEnabled());
-            usuarioAtualizado.setUsername(usuario.getUsername());
-            usuarioAtualizado.setDepartamentos(null);
-            for (Long id : departamentosID){
-                Departamento departamento = departamentoRepository.findById(id).get();
-                novosDepartamentos.add(departamento);
+    public String  atualizarDepartamento(Usuario usuario, List<Long> departamentosID)  {
+            if(departamentosID == null || departamentosID.isEmpty()){
+                Usuario usuarioAtualizado =  userRepository.findById(usuario.getId()).get();
+                usuarioAtualizado.setRole(usuario.getRole());
+                usuarioAtualizado.setNome(usuario.getNome());
+                usuarioAtualizado.setUsername(usuario.getUsername());
+                usuarioAtualizado.setEnabled(usuario.isEnabled());
+                usuarioAtualizado.setUsername(usuario.getUsername());
+                usuarioAtualizado.setDepartamentos(null);
+                userRepository.save(usuarioAtualizado);
+            }else {
+                Set<Departamento> novosDepartamentos = new HashSet<>();
+                Usuario usuarioAtualizado =  userRepository.findById(usuario.getId()).get();
+                usuarioAtualizado.setRole(usuario.getRole());
+                usuarioAtualizado.setNome(usuario.getNome());
+                usuarioAtualizado.setUsername(usuario.getUsername());
+                usuarioAtualizado.setEnabled(usuario.isEnabled());
+                usuarioAtualizado.setUsername(usuario.getUsername());
+                usuarioAtualizado.setDepartamentos(null);
+                for (Long id : departamentosID){
+                    Departamento departamento = departamentoRepository.findById(id).get();
+                    novosDepartamentos.add(departamento);
+                }
+                usuarioAtualizado.setDepartamentos(novosDepartamentos);
+                userRepository.save(usuarioAtualizado);
             }
-            usuarioAtualizado.setDepartamentos(novosDepartamentos);
-            userRepository.save(usuarioAtualizado);
-        }
-        return null;
+            return null;
     }
-
 }

@@ -2,6 +2,7 @@ package cloud.masteroflie.sgpa.controllers;
 
 import cloud.masteroflie.sgpa.dto.ProcessoResponse;
 import cloud.masteroflie.sgpa.mapper.MapperUtil;
+import cloud.masteroflie.sgpa.models.Arquivos;
 import cloud.masteroflie.sgpa.models.Processo;
 import cloud.masteroflie.sgpa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/")
@@ -34,7 +32,10 @@ public class StaffController extends BaseController {
     private ProcessoService processoService;
 
     @Autowired
-    private FileService fileService;
+    private BlobService fileService;
+
+    @Autowired
+    private ArquivoService arquivoService;
 
     @Autowired
     private MapperUtil mapperUtil;
@@ -62,10 +63,11 @@ public class StaffController extends BaseController {
     @GetMapping("processos/editar/{id}")
     public String processosEditarPage(@PathVariable("id") Long id, Model model) {
         addRoleAttributes(model);
+        Set<Arquivos> arquivos = processoService.buscarPorID(id).getArquivos();
         model.addAttribute("servicos", servicoService.listarTodos());
         model.addAttribute("departamentos", departamentoService.listaTodos());
         model.addAttribute("processo", processoService.buscarPorID(id));
-        model.addAttribute("files", fileService.arquivos(id));
+        model.addAttribute("arquivos", arquivos);
         return "staff/editar-processo";
     }
     @PostMapping("processos/editar")
@@ -74,16 +76,19 @@ public class StaffController extends BaseController {
         MultipartFile[] arquivos = files;
         fileService.salvarArquivos(files, processo.getId());
         addRoleAttributes(model);
-        return "redirect:/processos";
+        return "redirect:/processos/editar/" + processo.getId();
     }
 
     @PostMapping("processos/criar")
     public String processosCriar(@RequestParam("file") MultipartFile[] files, ProcessoResponse processoResponse, Model model) throws IOException {
-        Processo processo = processoService.criarRequest(processoResponse);
-        MultipartFile[] arquivos = files;
+        Processo processo = processoService.criarProcesso(processoResponse);
         fileService.salvarArquivos(files, processo.getId());
-        addRoleAttributes(model);
+
         return "redirect:/processos";
     }
-
+    @GetMapping("processos/arquivo/{id}")
+    public String visualizarArquivo(@PathVariable("id") Long arquivoID, Model model) {
+        String url =fileService.urlArquivos(arquivoService.buscarArquivo(arquivoID).getNomeBlob());
+        return "redirect:" + url;
+    }
 }

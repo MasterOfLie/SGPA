@@ -15,7 +15,7 @@
 <main>
     <div class="container-fluid p-4">
         <div class="container">
-            <h1 class="mb-4">Criar Processo</h1>
+            <h1 class="mb-4">Editar Processo</h1>
             <form th:action="@{/processos/editar}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="processoID" th:value="${processo.id}"/>
                 <div class="mb-2">
@@ -66,10 +66,37 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="arquivos" role="tabpanel">
-                            <div>
-                                <label class="form-label mt-4">Selecione os Documentos</label>
-                                <input class="form-control" type="file" name="file" multiple>
-                                <li th:each="file : ${files}" th:text="${file.absoluteFile.name}" ></li>
+                            <div class="row">
+                                <div class="col-6 p-2">
+                                    <div id="fileInputContainer">
+                                        <div class="file-input-group">
+                                            <label>Clique no ícone [+] para adicionar um ou mais arquivos</label>
+                                            <input id="arquivosup1" type="file" name="file" class="form-control mt-2" hidden multiple />
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary mt-2" onclick="addFileInput()"><i class="bi bi-file-earmark-plus"></i></button>
+                                </div>
+                                <div class="col-6 mt-3">
+                                    <table class="table table-hover">
+                                        <thead >
+                                        <tr>
+                                            <th scope="col-5"></th>
+                                            <th scope="col-1"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="table-active" th:each="arquivo : ${arquivos}">
+                                            <td th:text="${#strings.abbreviate(arquivo.nomeArquivo, 60)}">Column content</td>
+                                            <td>
+                                                <div class="d-flex justify-content-end">
+                                                    <a th:href="@{/processos/arquivo/{id}(id=${arquivo.id})}" target="_blank" class="btn btn-outline-primary btn-sm" title="Baixar/Visualizar"><i class="bi bi-file-arrow-down"></i></i></a>
+                                                    <a th:href="@{/processos/arquivo/{id}(id=${arquivo.id})}" target="_blank" class="btn btn-outline-danger btn-sm" title="Remover"><i class="bi bi-trash"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="externo" role="tabpanel">
@@ -78,7 +105,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary p-2">Criar Processo</button>
+                    <button type="submit" class="btn btn-primary p-2">Salvar</button>
                 </div>
             </form>
         </div>
@@ -109,5 +136,63 @@
         });
     });
 </script>
+<script>
+    let fileInputCount = 1; // Contador de inputs
+
+    function addFileInput() {
+        // Incrementa o contador para garantir IDs únicos
+        fileInputCount++;
+
+        // Cria um novo grupo de input de arquivo
+        const newFileInputGroup = document.createElement('div');
+        newFileInputGroup.className = 'file-input-group';
+
+        // Define um ID único para o novo input e o label
+        const newFileInputId = 'arquivosup' + fileInputCount;
+        const newFileLabelId = 'file-label' + fileInputCount;
+
+        // Adiciona o HTML do novo input e label
+        newFileInputGroup.innerHTML = `
+        <label for="${newFileInputId}" id="${newFileLabelId}"><i class="bi bi-cloud-arrow-up"></i> Escolher Arquivo(s)</label>
+        <input id="${newFileInputId}" type="file" name="file" class="form-control mt-2" hidden multiple />
+    `;
+
+        // Adiciona o novo input ao container
+        document.getElementById('fileInputContainer').appendChild(newFileInputGroup);
+
+        // Adiciona o evento de mudança ao novo input
+        document.getElementById(newFileInputId).addEventListener('change', function() {
+            const fileLabel = document.getElementById(newFileLabelId);
+            const files = this.files;
+
+            if (files.length > 0) {
+                const fileNames = [];
+                for (let i = 0; i < files.length; i++) {
+                    fileNames.push(files[i].name);
+                }
+                fileLabel.textContent = fileNames.join(', ');
+            } else {
+                fileLabel.innerHTML = '<i class="bi bi-cloud-arrow-up"></i> Escolher Arquivo(s)';
+            }
+        });
+    }
+
+    // Evento inicial para o primeiro input
+    document.getElementById('arquivosup1').addEventListener('change', function() {
+        const fileLabel = document.getElementById('file-label1');
+        const files = this.files;
+
+        if (files.length > 0) {
+            const fileNames = [];
+            for (let i = 0; i < files.length; i++) {
+                fileNames.push(files[i].name);
+            }
+            fileLabel.textContent = fileNames.join(', ');
+        } else {
+            fileLabel.innerHTML = '<i class="bi bi-cloud-arrow-up"></i> Escolher Arquivo(s)';
+        }
+    });
+</script>
+
 </body>
 </html>

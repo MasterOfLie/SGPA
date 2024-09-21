@@ -18,7 +18,7 @@
         <labe>Atenção: você só pode visualizar os processos do seu departamento.</labe>
         <div class="card-body">
             <div class="d-flex justify-content-end mb-3">
-                <a href="/processos/criar" class="btn btn-primary">Criar Processo</a>
+                <a href="/processos/criar" class="btn btn-primary">Novo Processo</a>
             </div>
             <table id="listar-departamentos" class="table">
                 <thead>
@@ -51,7 +51,8 @@
                     <td th:text="${processo.id}"></td>
                     <td th:text="${processo.nomeServico}"></td>
                     <td th:text="${processo.departamento}"></td>
-                    <td th:text="${processo.descricao}"></td>
+<!--                    <td th:text="${processo.descricao}"></td>-->
+                    <td th:text="${#strings.abbreviate(processo.descricao, 70)}"></td>
                     <td th:text="${processo.nomeRequerente}"></td>
                     <td th:text="${processo.funcionario}"></td>
                     <td class="text-end">

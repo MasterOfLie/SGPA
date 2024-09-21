@@ -15,9 +15,13 @@
 <main>
     <div class="container-fluid p-4">
         <h1>Lista de Serviços</h1>
+        <div th:if="${atualizado}" th:class="${usuario_editavel.contains('sucesso') ? 'alert alert-success' : 'alert alert-danger'}" class="alert alert-dismissible " id="alert-message">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong th:text="${usuario_editavel}"></strong>
+        </div>
         <div class="card-body">
             <div class="d-flex justify-content-end mb-3">
-                <a href="/admin/servico/criar" class="btn btn-primary">Criar Servico</a>
+                <a href="/admin/servicos/criar" class="btn btn-primary">Criar Servico</a>
             </div>
             <table id="listar-departamentos" class="table">
                 <thead>
@@ -42,7 +46,7 @@
                 <tr th:each="servico : ${servicos}">
                     <td th:text="${servico.id}"></td>
                     <td th:text="${servico.nome}"></td>
-                    <td th:text="${servico.descricao}"></td>
+                    <td th:text="${#strings.abbreviate(servico.descricao, 70)}"></td>
                     <td>
                         <span th:classappend="${servico.isActive() ? 'bg-success' : 'bg-danger'}"
                               class="d-inline-block rounded-circle p-1">
@@ -51,7 +55,7 @@
                     </td>
                     <td class="text-end">
                         <div>
-                            <a th:href="@{/admin/servico/editar/{id}(id=${servico.id})}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pen-fill"></i></a>
+                            <a th:href="@{/admin/servicos/editar/{id}(id=${servico.id})}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pen-fill"></i></a>
                         </div>
                     </td>
                 </tr>

@@ -34,12 +34,17 @@ public class SecurityConfig {
                         .loginPage("/auth")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
+                        .failureUrl("/auth?erro=true")
                 )
                 .authorizeHttpRequests(authoriza -> authoriza
                         .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/js/**").permitAll()
+                        .requestMatchers("/admin/admin/departamento").hasRole("ADMIN")
+                        .requestMatchers("/admin/admin/usuarios").hasRole("ADMIN")
+                        .requestMatchers("/admin/servicos/**").hasRole("ADMIN")
                         .requestMatchers("/").authenticated()
                         .anyRequest().authenticated()
+
                 )
                 .build();
     }

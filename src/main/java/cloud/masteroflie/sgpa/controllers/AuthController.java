@@ -1,6 +1,7 @@
 package cloud.masteroflie.sgpa.controllers;
 
 import cloud.masteroflie.sgpa.repository.UserRepository;
+import cloud.masteroflie.sgpa.service.AplicacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,13 @@ public class AuthController extends BaseController {
     UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    AplicacaoService aplicacaoService;
 
     @GetMapping("auth")
     public String index(Model model) {
-        return "/auth/login";
+        model.addAttribute("cssFile", aplicacaoService.getAplicacao("aplicacao").getTheme() + ".css");
+        return "auth/login.html";
     }
 
     @PostMapping("auth")

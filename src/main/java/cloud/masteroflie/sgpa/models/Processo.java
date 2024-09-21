@@ -3,6 +3,11 @@ package cloud.masteroflie.sgpa.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_processo")
@@ -18,6 +23,8 @@ public class Processo {
     private Long protocolo;
     private String anoVigencia;
     private String descricao;
+    @CreationTimestamp
+    private LocalDateTime dataAbertura;
 
     @ManyToOne
     @JoinColumn(name = "requerente_id", nullable = true)
@@ -35,5 +42,6 @@ public class Processo {
     @JoinColumn(name = "servico_id", nullable = false)
     private Servico servicos;
 
-
+    @OneToMany(mappedBy = "processo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Arquivos> arquivos = new HashSet<>();
 }

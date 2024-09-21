@@ -11,7 +11,8 @@ public interface ServicoService {
     Servico buscarServico (Long id);
 
     Servico criarServico (Servico servico);
-    Servico atualizarServico (Servico servico);
+
+    Servico salvar(Servico servico);
 
 
 }

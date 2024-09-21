@@ -29,7 +29,7 @@ public class ServicoServiceImpl implements ServicoService {
     }
 
     @Override
-    public Servico atualizarServico(Servico servico) {
+    public Servico salvar(Servico servico) {
         servicoRepository.save(servico);
         return servico;
     }

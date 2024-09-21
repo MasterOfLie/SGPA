@@ -14,6 +14,6 @@ public interface UsuarioService {
 
     List<Departamento> meusDepartamentos(Long id);
 
-    Void atualizarDepartamento(Usuario usuario, List<Long> departamentosID);
+    String atualizarDepartamento(Usuario usuario, List<Long> departamentosID);
 
 }

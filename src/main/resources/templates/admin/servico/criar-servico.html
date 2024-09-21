@@ -16,7 +16,7 @@
     <div class="container-fluid mt-3 p-5">
         <div class="container">
             <h1 class="mb-4">Criar de Serviços</h1>
-            <form th:action="@{/admin/servico/criar}" method="post">
+            <form th:action="@{/admin/servicos/criar}" method="post">
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome do Serviço</label>
                     <input type="text" class="form-control" id="nome" name="nome" required maxlength="60">
@@ -25,7 +25,7 @@
                     <label for="descricao" class="form-label">Descrição do Serviço</label>
                     <input type="text" class="form-control" id="descricao" name="descricao" required maxlength="250">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
             </form>
         </div>
     </div>

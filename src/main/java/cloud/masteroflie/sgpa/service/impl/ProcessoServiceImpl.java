@@ -42,7 +42,7 @@ public class ProcessoServiceImpl implements ProcessoService {
     }
 
     @Override
-    public Processo criarRequest(ProcessoResponse response) {
+    public Processo criarProcesso(ProcessoResponse response) {
         Servico servico = servicoRepository.findById(response.getServicoID()).get();
         Departamento departamento = departamentoRepository.findById(response.getDepartamentoID()).get();
         Usuario usuario = userRepository.findById(response.getUsuarioID()).get();

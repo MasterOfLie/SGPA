@@ -14,11 +14,12 @@
 
 <main>
     <div class="container-fluid p-4">
-        <h1>Lista de Serviços</h1>
+        <h1>Usuario</h1>
+        <div th:if="${atualizado}" th:class="${usuario_editavel.contains('sucesso') ? 'alert alert-success' : 'alert alert-danger'}" class="alert alert-dismissible " id="alert-message">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong th:text="${usuario_editavel}"></strong>
+        </div>
         <div class="card-body">
-            <div class="d-flex justify-content-end mb-3">
-                <a href="/admin/servico/criar" class="btn btn-primary">Criar Servico</a>
-            </div>
             <table id="listar-departamentos" class="table">
                 <thead>
                 <tr>
@@ -82,6 +83,16 @@
                 url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
             }
         });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const alertMessage = document.getElementById('alert-message');
+        if (alertMessage) {
+            setTimeout(() => {
+                alertMessage.style.display = 'none';
+            }, 3000);
+        }
     });
 </script>
 </body>

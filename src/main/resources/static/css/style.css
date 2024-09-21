@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
 }
 
 html, body{
@@ -25,4 +26,31 @@ html, body{
     justify-content: center;
     font-style: normal;
     color: #FFFFFF;
+}
+/* Classe para estilizar o upload de arquivo */
+.custom-file-upload {
+    display: inline-block;
+}
+
+.custom-file-upload label {
+    display: inline-block;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.custom-file-upload label i {
+    margin-right: 8px;
+}
+
+/* Esconde o input file */
+.file-input {
+    display: none;
+}
+
+.custom-file-upload label:hover {
+    background-color: #45a049;
 }
