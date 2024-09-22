@@ -22,6 +22,17 @@ public class Usuario implements UserDetails {
     private String username;
     private String password;
     private String nome;
+    private String email;
+    private String telefone;
+    private String cep;
+    private String logradouro;
+    private String bairro;
+    private String cidade;
+    private String uf;
+    private String numero;
+    private String complemento;
+    private String cpf;
+
     private RoleEnum role = RoleEnum.USUARIO;
     private boolean enabled = true;
 

@@ -1,5 +1,6 @@
 package cloud.masteroflie.sgpa.service;
 
+import cloud.masteroflie.sgpa.dto.SolicitanteDTO;
 import cloud.masteroflie.sgpa.models.Departamento;
 import cloud.masteroflie.sgpa.models.Usuario;
 
@@ -14,6 +15,8 @@ public interface UsuarioService {
 
     List<Departamento> meusDepartamentos(Long id);
 
-    String atualizarDepartamento(Usuario usuario, List<Long> departamentosID);
+    String atualizarUsuario(Usuario usuario, List<Long> departamentosID);
+
+    String atualizarSolicitantes(SolicitanteDTO solicitanteDTO);
 
 }

@@ -2,7 +2,9 @@ package cloud.masteroflie.sgpa.mapper;
 
 
 import cloud.masteroflie.sgpa.dto.ProcessosDTO;
+import cloud.masteroflie.sgpa.dto.SolicitanteDTO;
 import cloud.masteroflie.sgpa.dto.UsuarioDTO;
+import cloud.masteroflie.sgpa.enums.RoleEnum;
 import cloud.masteroflie.sgpa.models.Departamento;
 import cloud.masteroflie.sgpa.models.Processo;
 import cloud.masteroflie.sgpa.models.Usuario;
@@ -66,5 +68,16 @@ public class MapperUtil {
         }
         return processosDTOList;
     };
+    public List<Usuario> SolicitanteResponse(){
+        List<Usuario> solicitanteDTOList = new ArrayList<>();
+        List<Usuario> usuarios = usuarioService.listarTodos();
+
+        for (Usuario usuario : usuarios) {
+            if(usuario.getRole().equals(RoleEnum.USUARIO)){
+                solicitanteDTOList.add(usuario);
+            }
+        }
+        return solicitanteDTOList;
+    }
 
 }

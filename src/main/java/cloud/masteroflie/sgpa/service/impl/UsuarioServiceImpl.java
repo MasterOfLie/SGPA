@@ -1,5 +1,6 @@
 package cloud.masteroflie.sgpa.service.impl;
 
+import cloud.masteroflie.sgpa.dto.SolicitanteDTO;
 import cloud.masteroflie.sgpa.enums.RoleEnum;
 import cloud.masteroflie.sgpa.exception.ErroException;
 import cloud.masteroflie.sgpa.models.Departamento;
@@ -52,7 +53,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public String  atualizarDepartamento(Usuario usuario, List<Long> departamentosID)  {
+    public String atualizarUsuario(Usuario usuario, List<Long> departamentosID)  {
             if(departamentosID == null || departamentosID.isEmpty()){
                 Usuario usuarioAtualizado =  userRepository.findById(usuario.getId()).get();
                 usuarioAtualizado.setRole(usuario.getRole());
@@ -79,5 +80,22 @@ public class UsuarioServiceImpl implements UsuarioService {
                 userRepository.save(usuarioAtualizado);
             }
             return null;
+    }
+    @Override
+    public String atualizarSolicitantes(SolicitanteDTO solicitanteDTO)  {
+        Usuario usuarioAtualizado =  userRepository.findById(solicitanteDTO.getId()).get();
+        usuarioAtualizado.setNome(solicitanteDTO.getNome());
+        usuarioAtualizado.setLogradouro(solicitanteDTO.getLogradouro());
+        usuarioAtualizado.setCidade(solicitanteDTO.getCidade());
+        usuarioAtualizado.setCep(solicitanteDTO.getCep());
+        usuarioAtualizado.setEmail(solicitanteDTO.getEmail());
+        usuarioAtualizado.setTelefone(solicitanteDTO.getTelefone());
+        usuarioAtualizado.setCpf(solicitanteDTO.getCpf());
+        usuarioAtualizado.setEmail(solicitanteDTO.getEmail());
+        usuarioAtualizado.setNumero(solicitanteDTO.getNumero());
+        usuarioAtualizado.setComplemento(solicitanteDTO.getComplemento());
+        usuarioAtualizado.setBairro(solicitanteDTO.getBairro());
+        userRepository.save(usuarioAtualizado);
+        return null;
     }
 }

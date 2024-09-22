@@ -1,22 +1,11 @@
 package cloud.masteroflie.sgpa.controllers;
 
 import cloud.masteroflie.sgpa.dto.ConfigDTO;
-import cloud.masteroflie.sgpa.models.Departamento;
-import cloud.masteroflie.sgpa.models.Servico;
-import cloud.masteroflie.sgpa.models.Usuario;
 import cloud.masteroflie.sgpa.service.AplicacaoService;
-import cloud.masteroflie.sgpa.service.DepartamentoService;
-import cloud.masteroflie.sgpa.service.ServicoService;
-import cloud.masteroflie.sgpa.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")

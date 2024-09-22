@@ -1,9 +1,7 @@
 package cloud.masteroflie.sgpa.controllers;
 
-import cloud.masteroflie.sgpa.enums.RoleEnum;
 import cloud.masteroflie.sgpa.models.Usuario;
 import cloud.masteroflie.sgpa.service.DepartamentoService;
-import cloud.masteroflie.sgpa.service.ServicoService;
 import cloud.masteroflie.sgpa.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -49,7 +47,7 @@ public class UsuarioController extends BaseController {
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             redirectAttributes.addFlashAttribute("usuario_editavel", "Usuario " + usuario.getNome() + " atualizado com sucesso");
             redirectAttributes.addFlashAttribute("atualizado", true);
-            usuarioService.atualizarDepartamento(usuario, departamentoIds);
+            usuarioService.atualizarUsuario(usuario, departamentoIds);
         } else {
             redirectAttributes.addFlashAttribute("atualizado", true);
             redirectAttributes.addFlashAttribute("usuario_editavel", "Você não tem permissão para alterar esse usuário");

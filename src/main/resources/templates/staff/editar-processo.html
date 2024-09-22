@@ -90,7 +90,9 @@
                                             <td>
                                                 <div class="d-flex justify-content-end">
                                                     <a th:href="@{/processos/arquivo/{id}(id=${arquivo.id})}" target="_blank" class="btn btn-outline-primary btn-sm" title="Baixar/Visualizar"><i class="bi bi-file-arrow-down"></i></i></a>
-                                                    <a th:href="@{/processos/arquivo/{id}(id=${arquivo.id})}" target="_blank" class="btn btn-outline-danger btn-sm" title="Remover"><i class="bi bi-trash"></i></a>
+                                                    <a th:onclick="'javascript:removerArquivo(' + ${arquivo.id} + ')'" class="btn btn-outline-danger btn-sm" title="Remover">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -137,31 +139,24 @@
     });
 </script>
 <script>
-    let fileInputCount = 1; // Contador de inputs
+    let fileInputCount = 1;
 
     function addFileInput() {
-        // Incrementa o contador para garantir IDs únicos
         fileInputCount++;
 
-        // Cria um novo grupo de input de arquivo
         const newFileInputGroup = document.createElement('div');
         newFileInputGroup.className = 'file-input-group';
 
-        // Define um ID único para o novo input e o label
+
         const newFileInputId = 'arquivosup' + fileInputCount;
         const newFileLabelId = 'file-label' + fileInputCount;
 
-        // Adiciona o HTML do novo input e label
         newFileInputGroup.innerHTML = `
         <label for="${newFileInputId}" id="${newFileLabelId}"><i class="bi bi-cloud-arrow-up"></i> Escolher Arquivo(s)</label>
-        <input id="${newFileInputId}" type="file" name="file" class="form-control mt-2" hidden multiple />
-    `;
+        <input id="${newFileInputId}" type="file" name="file" class="form-control mt-2" hidden multiple />`;
 
-        // Adiciona o novo input ao container
         document.getElementById('fileInputContainer').appendChild(newFileInputGroup);
-
-        // Adiciona o evento de mudança ao novo input
-        document.getElementById(newFileInputId).addEventListener('change', function() {
+        document.getElementById(newFileInputId).addEventListener('change', function () {
             const fileLabel = document.getElementById(newFileLabelId);
             const files = this.files;
 
@@ -177,8 +172,7 @@
         });
     }
 
-    // Evento inicial para o primeiro input
-    document.getElementById('arquivosup1').addEventListener('change', function() {
+    document.getElementById('arquivosup1').addEventListener('change', function () {
         const fileLabel = document.getElementById('file-label1');
         const files = this.files;
 
@@ -192,6 +186,28 @@
             fileLabel.innerHTML = '<i class="bi bi-cloud-arrow-up"></i> Escolher Arquivo(s)';
         }
     });
+    function removerArquivo(arquivoID) {
+        if (confirm('Tem certeza que deseja remover este arquivo?')) {
+            fetch(`/processos/arquivo/remover/${arquivoID}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Redirecionar ou atualizar a página após remoção bem-sucedida
+                        window.location.reload();  // Atualiza a página após o sucesso
+                    } else {
+                        alert('Erro ao remover arquivo.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao remover arquivo:', error);
+                    alert('Erro ao remover arquivo.');
+                });
+        }
+    }
 </script>
 
 </body>

@@ -3,6 +3,7 @@ package cloud.masteroflie.sgpa.controllers;
 import cloud.masteroflie.sgpa.repository.UserRepository;
 import cloud.masteroflie.sgpa.service.AplicacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ public class AuthController extends BaseController {
     @Autowired
     AplicacaoService aplicacaoService;
 
+
     @GetMapping("auth")
     public String index(Model model) {
         model.addAttribute("cssFile", aplicacaoService.getAplicacao("aplicacao").getTheme() + ".css");
@@ -28,9 +30,7 @@ public class AuthController extends BaseController {
     }
 
     @PostMapping("auth")
-    public String post(Model model) {
-        System.out.println("post");
-        addRoleAttributes(model);
-        return "redirect:/";
+    public String post( Model model) {
+        return "auth/login.html";
     }
 }

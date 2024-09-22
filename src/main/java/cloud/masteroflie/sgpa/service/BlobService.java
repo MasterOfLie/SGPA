@@ -9,4 +9,5 @@ public interface BlobService {
 
     String urlArquivos (String blobName);
 
+    Void removerArquivo (String blobName);
 }

@@ -26,7 +26,7 @@ public class BlobServiceImpl implements BlobService {
     @Autowired
     ProcessoRepository processoRepository;
 
-    String connect = "string";
+    String connect = "string connect";
     BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(connect).buildClient();
     BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient("developer");
 
@@ -74,9 +74,18 @@ public class BlobServiceImpl implements BlobService {
         String sasToken = blobClient.generateSas(values);
         return blobClient.getBlobUrl() + "?" + sasToken;
     }
+
+    @Override
+    public Void removerArquivo(String blobName) {
+            BlobClient blobClient = containerClient.getBlobClient(blobName);
+            blobClient.delete();
+            return null;
+    }
+
     private String generateNewFileName(String originalFileName, Long protocoloID) {
         String timestamp = String.valueOf(System.currentTimeMillis());
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         return protocoloID + "-" + timestamp + "_" + originalFileName;
     }
+
 }

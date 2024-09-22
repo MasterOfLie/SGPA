@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-br">
+<head th:replace="~{layout :: head}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="layout :: tituloPadrao">Usuário</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+</head>
+<body>
+<header th:replace="~{layout :: menu}"></header>
+
+<main>
+    <div class="container-fluid mt-3 p-5">
+        <div class="container">
+            <h1 class="mb-4">Editar Solicitate</h1>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#profile" aria-selected="true" role="tab">Perfil</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="tab" href="#endereco" aria-selected="false" role="tab" tabindex="-1">Endereço</a>
+                </li>
+            </ul>
+            <form th:object="${usuario_editavel}" th:action="@{/solicitante/atualizar}" method="post">
+                <div id="myTabContent" class="tab-content">
+                    <div class="d-flex justify-content-end p-2">
+                    <button type="submit" class="btn btn-primary">Atualizar Perfil</button></div>
+                    <div class="tab-pane fade active show" id="profile" role="tabpanel">
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="hidden" th:field="*{id}" />
+                                <div class="mb-3">
+                                    <label for="id_fake" class="form-label">ID do Usuário</label>
+                                    <input type="text" class="form-control" th:field="*{id}" id="id_fake" required maxlength="60" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Usuário</label>
+                                    <input type="hidden" th:field="*{username}" />
+                                    <input type="text" class="form-control" th:field="*{username}" id="username" name="username" required maxlength="60" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Nome do Solicitante</label>
+                                    <input type="text" class="form-control" th:field="*{nome}"required maxlength="60">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">CPF/CNPJ</label>
+                                    <input type="text" class="form-control" id="cpfcnpj" th:field="*{cpf}"required maxlength="60">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Telefone</label>
+                                    <input type="text" class="form-control" id="sp_celphones"  th:field="*{telefone}"required maxlength="60">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">E-mail</label>
+                                    <input type="text" class="form-control" th:field="*{email}"required maxlength="60">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="endereco" role="tabpanel">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Cep</label>
+                                    <input type="text" it="cep" class="form-control" th:field="*{cep}" required maxlength="60">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_fake" class="form-label">Cidade</label>
+                                    <input type="text" class="form-control" th:field="*{cidade}" required maxlength="60">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Bairro</label>
+                                    <input type="text" class="form-control" th:field="*{bairro}" required maxlength="60">
+                                </div>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Logradouro</label>
+                                    <input type="text" class="form-control" th:field="*{logradouro}" required maxlength="60">
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Numero</label>
+                                    <input type="text" class="form-control" th:field="*{numero}" required maxlength="60">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Complemento</label>
+                                    <input type="text" class="form-control" th:field="*{complemento}" maxlength="60">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{layout :: rodape}"></footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script type="text/javascript">
+    $("#telefone, #celular").mask("(00) 0000-0000");
+    $(document).ready(function () {
+        $('#listar-departamentos').DataTable({
+            info: false,
+            ordering: true,
+            paging: true,
+            searching: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
+            }
+        });
+    });
+    $(document).ready(function(){
+        $('#sp_celphones').mask('(00) 00000-0000');
+    });
+    $(document).ready(function(){
+        $('#cep').mask('00000-000');
+    });
+    $("#cpfcnpj").keydown(function(){
+        try {
+            $("#cpfcnpj").unmask();
+        } catch (e) {}
+
+        var tamanho = $("#cpfcnpj").val().length;
+
+        if(tamanho < 11){
+            $("#cpfcnpj").mask("999.999.999-99");
+        } else {
+            $("#cpfcnpj").mask("99.999.999/9999-99");
+        }
+
+        // ajustando foco
+        var elem = this;
+        setTimeout(function(){
+            // mudo a posição do seletor
+            elem.selectionStart = elem.selectionEnd = 10000;
+        }, 0);
+        // reaplico o valor para mudar o foco
+        var currentValue = $(this).val();
+        $(this).val('');
+        $(this).val(currentValue);
+    });
+</script>
+
+</body>
+</html>
