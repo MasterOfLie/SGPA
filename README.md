@@ -9,17 +9,17 @@ O **Sistema de Gestão de Processos Administrativos (SGPA)** é uma solução de
 * **Gestão de documentos**: Armazenamento e organização de arquivos e documentos vinculados a cada processo.  
 * **Permissões de acesso**: Gerenciamento de permissões de acordo com perfis de usuários, como gestores, administradores, e colaboradores.
 
-## **Tela de Processos**
+## **Tela de Processos.**
 
-![][image1]
+![Processos](img/processos.png)
 
-## **Tela de Serviços**
+## **Tela de Serviços.**
 
-![][image2]
+![Serviços](img/servicos.png)
 
 ## **Tela de Usuários.**
 
-![][image3]
+![Usuários](img/usuarios.png)
 
 ## **Licença**
 
