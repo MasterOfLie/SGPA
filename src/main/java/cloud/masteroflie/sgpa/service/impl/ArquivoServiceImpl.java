@@ -16,4 +16,10 @@ public class ArquivoServiceImpl implements ArquivoService {
     public Arquivos buscarArquivo(Long id) {
         return arquivoRepository.findById(id).get();
     }
+
+    @Override
+    public Void removerArquivo(Long id) {
+        arquivoRepository.deleteById(id);
+        return null;
+    }
 }

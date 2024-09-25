@@ -103,6 +103,7 @@ public class StaffController extends BaseController {
     @DeleteMapping("processos/arquivo/remover/{id}")
     public ResponseEntity removerArquivo(@PathVariable("id") Long arquivoID, Model model) {
         fileService.removerArquivo(arquivoService.buscarArquivo(arquivoID).getNomeBlob());
+        arquivoService.removerArquivo(arquivoID);
         return ResponseEntity.ok().build();
     }
     @GetMapping("/solicitantes")

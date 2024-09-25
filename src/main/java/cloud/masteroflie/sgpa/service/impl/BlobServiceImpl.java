@@ -1,8 +1,10 @@
 package cloud.masteroflie.sgpa.service.impl;
 
 import cloud.masteroflie.sgpa.models.Arquivos;
+import cloud.masteroflie.sgpa.repository.AplicacaoRepository;
 import cloud.masteroflie.sgpa.repository.ArquivoRepository;
 import cloud.masteroflie.sgpa.repository.ProcessoRepository;
+import cloud.masteroflie.sgpa.service.AplicacaoService;
 import cloud.masteroflie.sgpa.service.BlobService;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
@@ -11,7 +13,9 @@ import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobHttpHeaders;
 import com.azure.storage.blob.sas.BlobSasPermission;
 import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,15 +25,30 @@ import java.time.OffsetDateTime;
 public class BlobServiceImpl implements BlobService {
 
     @Autowired
-    ArquivoRepository arquivoRepository;
+    private ArquivoRepository arquivoRepository;
 
     @Autowired
-    ProcessoRepository processoRepository;
+    private ProcessoRepository processoRepository;
 
-    String connect = "string connect";
-    BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(connect).buildClient();
-    BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient("developer");
+    @Autowired
+    private AplicacaoRepository aplicacaoRepository;
 
+    @Value("${blob.container.clientet}")
+    private String blobContainerClient;
+    @Value("${blob.connect.clientet}")
+    private String connectString;
+
+    private BlobServiceClient blobServiceClient;
+    private BlobContainerClient containerClient;
+
+    @PostConstruct
+    public void init() {
+        blobServiceClient = new BlobServiceClientBuilder().connectionString(connectString).buildClient();
+        containerClient = blobServiceClient.getBlobContainerClient(blobContainerClient);
+    }
+    public BlobContainerClient getContainerClient() {
+        return this.containerClient = containerClient;
+    }
 
     @Override
     public String salvarArquivos(MultipartFile[] files, Long protocoloID) {

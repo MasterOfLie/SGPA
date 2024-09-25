@@ -1,5 +1,6 @@
 package cloud.masteroflie.sgpa.controllers;
 
+import cloud.masteroflie.sgpa.repository.AplicacaoRepository;
 import cloud.masteroflie.sgpa.repository.UserRepository;
 import cloud.masteroflie.sgpa.service.AplicacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,14 @@ public class AuthController extends BaseController {
     PasswordEncoder passwordEncoder;
     @Autowired
     AplicacaoService aplicacaoService;
+    @Autowired
+    AplicacaoRepository aplicacaoRepository;
 
 
     @GetMapping("auth")
     public String index(Model model) {
         model.addAttribute("cssFile", aplicacaoService.getAplicacao("aplicacao").getTheme() + ".css");
+        System.out.println(aplicacaoRepository.findByAplicacao("aplicacao").getContainerBlob());
         return "auth/login.html";
     }
 

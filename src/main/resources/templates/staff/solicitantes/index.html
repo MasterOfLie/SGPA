@@ -14,7 +14,7 @@
 
 <main>
     <div class="container-fluid p-4">
-        <h1>Usuario</h1>
+        <h1>Solicitanes</h1>
         <div th:if="${atualizado}" th:class="${usuario_editavel.contains('sucesso') ? 'alert alert-success' : 'alert alert-danger'}" class="alert alert-dismissible " id="alert-message">
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             <strong th:text="${usuario_editavel}"></strong>
