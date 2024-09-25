@@ -4,10 +4,10 @@ O **Sistema de Gestão de Processos Administrativos (SGPA)** é uma solução de
 
 ## **Funcionalidades Principais**
 
-* **Criação e gestão de processos administrativos**: Permite a criação e o gerenciamento de processos com numeração sequencial por ano.  
-* **Controle de tramitação**: Acompanha o fluxo do processo entre diferentes departamentos ou setores.  
+* **Criação e gestão de processos administrativos**: Permite a criação e o gerenciamento de processos com numeração sequencial;
+* **Controle de tramitação**: Acompanha o fluxo do processo entre diferentes departamentos. 
 * **Gestão de documentos**: Armazenamento e organização de arquivos e documentos vinculados a cada processo.  
-* **Permissões de acesso**: Gerenciamento de permissões de acordo com perfis de usuários, como gestores, administradores, e colaboradores.
+* **Permissões de acesso**: Gerenciamento de permissões de acordo com perfis de usuários, como administradores, e usuarios.
 
 ## **Tela de Processos.**
 
