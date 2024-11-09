@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="modal" id="dados" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Informações sobre o serviço. <span class="text-danger"><i
+                                            class="bi bi-bug"></i> (EM TESTE)</span></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <label class="form-label mt-4"
+                                        th:text="${'Total de Processos: ' + processos}"></label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid p-2">
+                    <div class="container-fluid p-2 d-flex flex-column  ms-auto">
+                        <h3 class="text-dark">
+                            <i class="bi bi-clipboard-data"></i> Editar Serviço
+                        </h3>
+                        <div class="ms-auto align-content-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/servicos">Serviços</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Editar</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#informacoes" aria-selected="true"
+                                role="tab">Informações</a>
+                        </li>
+                        <li class="ms-auto nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                aria-haspopup="true" aria-expanded="false"><i class="bi bi-gear"></i></a>
+                            <div class="dropdown-menu" style="">
+                                <h6 class="dropdown-header">Operações</h6>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
+                                    data-bs-target="#dados"><i class="bi bi-info-circle"></i> Informações
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="statusServico(this)"><i
+                                        class="bi bi-toggles"></i> Ativar/Desativar
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="deleteServico(this)"><i
+                                        class="bi bi-trash3"></i> Excluir</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade show active" id="informacoes" role="tabpanel">
+                            <div>
+                                <label for="nome" class="form-label mt-4">ID</label>
+                                <input type="text" class="form-control" id="id" name="nome" autocomplete="off"
+                                    maxlength="255" th:value="${servico.id}" readonly>
+                            </div>
+                            <div>
+                                <label for="nome" class="form-label mt-4">Nome</label>
+                                <input type="text" class="form-control" id="nome" name="nome"
+                                    placeholder="Nome do Serviço" autocomplete="off" maxlength="255"
+                                    th:value="${servico.nome}" required>
+                            </div>
+                            <div>
+                                <label for="descricao" class="form-label mt-4">Descricao</label>
+                                <input type="text" class="form-control" id="descricao" name="descricao"
+                                    placeholder="Descricao do Serviço" autocomplete="off" maxlength="255"
+                                    th:value="${servico.descricao}" required>
+                            </div>
+                            <div>
+                                <label for="setorID" class="form-label mt-4">Setor</label>
+                                <select class="form-select" id="setorID" name="setorID" required>
+                                    <option value="disabled" disabled selected>Selecione um Setor</option>
+                                    <option th:each="setor : ${setores}" th:value="${setor.id}" th:text="${setor.nome}"
+                                        th:selected="${setor.servicos.contains(servico)}"></option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="aberturaOnline" class="form-label mt-4">Permir abertua no Portal?</label>
+                                <select class="form-select" id="aberturaOnline" name="aberturaOnline" required>
+                                    <option value="disabled" disabled selected>Selecione uma Opção</option>
+                                    <option value="true" th:selected="${servico.aberturaOnline}">Sim</option>
+                                    <option value="false" th:selected="${!servico.aberturaOnline}">Não</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="departamentoPadrao" class="form-label mt-4">Departamento padrão dos
+                                    processos</label>
+                                <p class="section-subtitle">Quando o processo for aberto pelo portal de solicitações,
+                                    ele será direcionado automaticamente ao departamento selecionado como padrão.</p>
+                                <select class="form-select" id="departamentoPadrao" name="departamentoPadrao"
+                                    th:disabled="${!servico.aberturaOnline}">
+                                    <option value="" disabled selected>Selecione um Departamento</option>
+                                    <option th:each="departamento : ${departamentos}" th:value="${departamento.id}"
+                                        th:text="${departamento.nome}"
+                                        th:selected="${departamento.servicos.contains(servico)}"></option>
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end m-3">
+                                <a href="/servicos" class="btn btn-danger btn-sm m-2">Cancelar</a>
+                                <a href="javascript:void(0)" class="btn btn-success btn-sm m-2" id="criarPerfil"
+                                    onclick="editarServico()">Salvar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+    <script th:src="@{/js/servico.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="container-fluid p-2">
+                    <div class="container-fluid p-2 d-flex flex-column ms-auto">
+                        <div>
+                            <h2 class="section-title">Lista de Usuários </h2>
+                            <p class="section-subtitle">Visualize e gerencie os usuários cadastrados no sistema.</p>
+                        </div>
+                    </div>
+                    <table id="tabela" class="display table nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>CPF/CNPJ</th>
+                                <th>Perfil</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>CPF/CNPJ</th>
+                                <th>Perfil</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr th:each="usuario : ${usuarios}">
+                                <td th:text="${usuario.name}"></td>
+                                <td th:text="${usuario.email}"></td>
+                                <td th:text="${usuario.cpfCnpj}"></td>
+                                <td th:text="${usuario.perfil?.getNome() ?: 'Solicitante'}"></td>
+                                <td>
+                                    <div class="d-flex justify-content-end">
+                                        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-sm me-1"
+                                            title="Editar Usuário"><i class="bi bi-pencil-square"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+</body>
+
+</html>

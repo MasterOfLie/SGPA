@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="modal" id="password" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Alterar senha do Usuário.</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <label class="form-label mt-4" for="password">Nova senha:</label>
+                                    <input class="form-control" id="senha" name="senha" type="password" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</a>
+                                <a type="button" class="btn btn-primary" onclick="alterarSenha(this)"
+                                    data-bs-dismiss="modal">Alterar Senha</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid p-2">
+                    <div class="m-2">
+                        <div class="container-fluid p-2 d-flex flex-column  ms-auto">
+                            <h3 class="text-dark">
+                                <i class="bi bi-person-circle"></i> Editar Usuário
+                            </h3>
+                            <div class="ms-auto align-content-center">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/usuarios">Usuários</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#informacoes" aria-selected="true"
+                                    role="tab">Informações</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#perfil" aria-selected="false"
+                                    tabindex="-1" role="tab">Perfil</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#departamentos" aria-selected="false"
+                                    tabindex="-1" role="tab">Departamentos</a>
+                            </li>
+                            <li class="ms-auto nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                    aria-haspopup="true" aria-expanded="false"><i class="bi bi-gear"></i></a>
+                                <div class="dropdown-menu" style="">
+                                    <h6 class="dropdown-header">Operações</h6>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item " href="javascript:void(0)" data-bs-toggle="modal"
+                                        data-bs-target="#password"><i class="bi bi-shield-lock"></i> Alterar Senha</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="removePerfil(this)"><i
+                                            class="bi bi-trash3"></i> Remover Perfil</a>
+                                </div>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade show active" id="informacoes" role="tabpanel">
+                                <div>
+                                    <label class="form-label mt-4" for="id">ID</label>
+                                    <input class="form-control" id="id" name="id" type="text" readonly=""
+                                        th:value="${usuario.id}">
+                                </div>
+                                <div>
+                                    <label for="nome" class="form-label mt-4">Nome</label>
+                                    <input type="text" class="form-control" id="nome" name="nome"
+                                        placeholder="Nome do Usuario" readonly="" autocomplete="off"
+                                        th:value="${usuario.name}">
+                                </div>
+                                <div>
+                                    <label for="nome" class="form-label mt-4">CPF/CNPJ</label>
+                                    <input type="text" class="form-control" id="cpfCnpj" name="nome"
+                                        placeholder="CPF/CNPJ" readonly="" autocomplete="off"
+                                        th:value="${usuario.cpfCnpj}">
+                                </div>
+                                <div>
+                                    <label for="email" class="form-label mt-4">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" readonly=""
+                                        placeholder="Email do Usuario" autocomplete="off" th:value="${usuario.email}">
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" id="perfil">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Perfil</th>
+                                            <th class="col-1"></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Perfi</th>
+                                            <th class="col-1"></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:each="perfil : ${perfils}">
+                                            <td th:text="${perfil.nome}"></td>
+                                            <td>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" onclick="addPerfil(this)"
+                                                        name="perfil" type="radio" th:id="${perfil.id}"
+                                                        th:value="${perfil.id}"
+                                                        th:checked="${usuario.perfil != null and usuario.perfil.nome == perfil.nome}">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="departamentos">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Perfil</th>
+                                            <th class="col-1"></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Perfi</th>
+                                            <th class="col-1"></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:each="departamento : ${departamentos}">
+                                            <td th:text="${departamento.nome}"></td>
+                                            <td>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" onclick="addDepartamento(this)"
+                                                        name="perfil" type="checkbox" th:id="${departamento.id}"
+                                                        th:value="${departamento.id}"
+                                                        th:checked="${usuario.departamentos != null and usuario.departamentos.contains(departamento)}">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+    <script th:src="@{/js/usuario.js}"></script>
+    <script th:src="@{/js/solicitante.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/file.css}" rel="stylesheet" />
+    <title th:fragment="title">Meus Processos</title>
+
+    <style>
+        .dev-bg {
+            background-color: #FF004D;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header class="header-bar" th:fragment="menu">
+        <div class="header-logo"
+            th:classappend="${#arrays.contains(@environment.activeProfiles, 'dev')} ? 'dev-bg' : ''">
+            <a href="/">SGPA</a>
+        </div>
+        <div class="header-nav"
+            th:classappend="${#arrays.contains(@environment.activeProfiles, 'dev')} ? 'dev-bg' : ''">
+            <div>
+                <button id="sidebar-toggle"
+                    th:classappend="${#arrays.contains(@environment.activeProfiles, 'dev')} ? 'dev-bg' : ''">
+                    <i class="bi bi-list"
+                        th:classappend="${#arrays.contains(@environment.activeProfiles, 'dev')} ? 'dev-bg' : ''"></i>
+                </button>
+            </div>
+            <div class="user-info"
+                th:classappend="${#arrays.contains(@environment.activeProfiles, 'dev')} ? 'dev-bg' : ''">
+                <div class="">
+                    <ul class="nav">
+                        <li class="align-items-end nav-item dropdown">
+                            <i class="bi bi-person"></i><a data-bs-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="true" aria-expanded="false" th:text="${usuarioLogado}"></a>
+                            <div class="dropdown-menu dropdown-menu-end perfil mt-2">
+                                <h6 class="dropdown-header">Meu Perfil</h6>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-dark" href="javascript:void(0)"><i class="bi bi-shield-lock"></i> Informações</a>
+                                <a class="dropdown-item text-dark" href="javascript:void(0)"><i class="bi bi-shield-lock"></i> Alterar Senha</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="/logout"><i class="bi bi-box-arrow-right"></i> Sair</a>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:fragment="nav">
+                <ul class="menu-items">
+                    <!-- Menu Processos com Dropdown -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-btn">
+                            <i class="bi bi-files"></i>Processos
+                        </a>
+                        <div class="dropdown-container">
+                            <a href="/processos"><i class="bi bi-files"></i> Todos os Processos</a>
+                            <a href="/processos/analise"><i class="bi bi-search"></i>Processos em Análise</a>
+                            <a href="/processos/criar"><i class="bi bi-plus-circle"></i>Novo Processo</a>
+                        </div>
+                    </li>
+
+                    <!-- Menu Solicitantes -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-btn">
+                            <i class="bi bi-person-lines-fill"></i>Solicitantes
+                        </a>
+                        <div class="dropdown-container">
+                            <a href="/solicitantes"><i class="bi bi-list"></i>Listar Solicitantes</a>
+                            <a href="/solicitantes/criar"><i class="bi bi-plus-circle"></i>Novo Solicitante</a>
+                        </div>
+                    </li>
+
+                    <!-- Menu Setor (visível condicionalmente) -->
+                    <li class="dropdown" th:if="${view_sector}">
+                        <a href="javascript:void(0)" class="dropdown-btn">
+                            <i class="bi bi-briefcase"></i>Setor
+                        </a>
+                        <div class="dropdown-container">
+                            <a href="/setores"><i class="bi bi-list"></i>Todos os Setores</a>
+                            <a href="/setores/criar"><i class="bi bi-plus-circle"></i>Novo Setor</a>
+                        </div>
+                    </li>
+
+                    <!-- Menu Serviços -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-btn" th:if="${view_service}">
+                            <i class="bi bi-clipboard-data"></i>Serviços
+                        </a>
+                        <div class="dropdown-container">
+                            <a href="/servicos"><i class="bi bi-list"></i>Todos os Serviços</a>
+                            <a href="/servicos/criar"><i class="bi bi-plus-circle"></i>Novo Serviço</a>
+                        </div>
+                    </li>
+
+                    <!-- Menu Departamentos -->
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-btn" th:if="${view_department}">
+                            <i class="bi bi-building"></i>Departamentos
+                        </a>
+                        <div class="dropdown-container">
+                            <a href="/departamentos"><i class="bi bi-list"></i>Todos os Departamentos</a>
+                            <a href="/departamentos/criar"><i class="bi bi-plus-circle"></i>Novo Departamento</a>
+                        </div>
+                    </li>
+
+                    <!-- Menu Usuários (visível condicionalmente) -->
+                    <li class="dropdown" th:if="${view_user}">
+                        <a href="javascript:void(0)" class="dropdown-btn">
+                            <i class="bi bi-person-circle"></i>Usuários
+                        </a>
+                        <div class="dropdown-container">
+                            <a href="/usuarios"><i class="bi bi-list"></i>Todos os Usuários</a>
+                            <a href="/solicitantes/criar"><i class="bi bi-plus-circle"></i>Novo Usuário</a>
+                        </div>
+                    </li>
+
+                    <!-- Menu Perfil (visível condicionalmente) -->
+                    <li class="dropdown" th:if="${view_profile}">
+                        <a href="javascript:void(0)" class="dropdown-btn">
+                            <i class="bi bi-person-bounding-box"></i>Perfil
+                        </a>
+                        <div class="dropdown-container">
+                            <a href="/perfils"><i class="bi bi-list"></i>Todos os Perfis</a>
+                            <a href="/perfils/criar"><i class="bi bi-plus-circle"></i>Novo Perfil</a>
+                        </div>
+                    </li>
+
+                    <!-- Menu Configurações -->
+                    <li class="dropdown" th:if="${view_administration}">
+                        <a href="javascript:void(0)" class="dropdown-btn">
+                            <i class="bi bi-sliders"></i>Administração
+                        </a>
+                        <div class="dropdown-container">
+                            <a href="/configuracoes"><i class="bi bi-gear"></i>Configurações Gerais</a>
+                            <a href="/configuracoes/avancadas"><i class="bi bi-tools"></i>Configurações Avançadas</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+<!--                CONTEUDO AQUI-->
+            </div>
+            <div class="footer" th:fragment="footer">
+                <p
+                    th:text="${#arrays.contains(@environment.activeProfiles, 'dev')} ? '© 2024 Ambiente de Desenvolvimento - Todas as funcionalidades estão em modo de teste.' : '© 2024 Sistema SGPA - Todos os direitos reservados.'">
+                </p>
+            </div>
+        </main>
+    </section>
+
+    <div th:fragment="scripts">
+        <script th:src="@{/js/sidebar.js}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/pt-BR.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script th:src="@{/js/datatable.js}"></script>
+    </div>
+
+</body>
+
+</html>

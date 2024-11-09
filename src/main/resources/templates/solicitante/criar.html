@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="m-2">
+                    <div class="container-fluid p-2 d-flex flex-column  ms-auto">
+                        <h3 class="text-dark">
+                            <i class="bi bi-person-lines-fill"></i> Editar Solicitante
+                        </h3>
+                        <div class="ms-auto align-content-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/solicitantes">Solicitantes</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Editar</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#informacoes" aria-selected="true"
+                                role="tab">Informações</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#endereco" aria-selected="false"
+                                tabindex="-1" role="tab">Endereço</a>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade show active" id="informacoes" role="tabpanel">
+                            <div>
+                                <label for="nome" class="form-label mt-4">Nome</label>
+                                <input type="text" class="form-control" id="nome" name="nome"
+                                    placeholder="Nome do Solicitante" autocomplete="off" maxlength="255" required>
+                            </div>
+                            <div>
+                                <label for="nome" class="form-label mt-4">CPF/CNPJ</label>
+                                <input type="text" class="form-control" id="cpfCnpj" name="nome" placeholder="CPF/CNPJ"
+                                    autocomplete="off" minlength="11" required>
+                            </div>
+                            <div>
+                                <label for="telefone" class="form-label mt-4">Telefone</label>
+                                <input type="email" class="form-control" id="telefone" name="telefone"
+                                    placeholder="Telefone do Solicitante" autocomplete="off" maxlength="255" required>
+                            </div>
+                            <div>
+                                <label for="email" class="form-label mt-4">Email</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Email do Solicitante" autocomplete="off" maxlength="255" required>
+                            </div>
+                            <div>
+                                <label for="email" class="form-label mt-4">Senha</label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Senha do Solicitante" autocomplete="off" maxlength="255" required>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="endereco" role="tabpanel">
+                            <div>
+                                <label for="cep" class="form-label mt-4">CEP</label>
+                                <input type="text" class="form-control" id="cep" name="cep" placeholder="Cep"
+                                    autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="cidade" class="form-label mt-4">Cidade</label>
+                                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Cidade"
+                                    autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="bairro" class="form-label mt-4">Bairro</label>
+                                <input type="text" class="form-control" id="bairro" name="bairro" placeholder="Bairro"
+                                    autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="logradouro" class="form-label mt-4">Logradouro</label>
+                                <input type="text" class="form-control" id="logradouro" name="logradouro"
+                                    placeholder="Logradouro" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="estado" class="form-label mt-4">Estado</label>
+                                <input type="text" class="form-control" id="estado" name="estado" placeholder="Estado"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end m-3">
+                            <a href="javascript:void(0)" onclick="cadastrarSolicitante(this)"
+                                class="btn btn-success btn-sm m-2">Salvar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"
+        integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script th:src="@{/js/solicitante.js}"></script>
+</body>
+
+</html>

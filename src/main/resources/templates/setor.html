@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head th:replace="layout :: head">
+    <title th:fragment="title">Meus Setores</title>
+</head>
+<body>
+    <header th:replace="layout :: menu"></header>
+    <div class="main-content">
+        <nav th:replace="layout :: nav"></nav>
+
+        <div class="conteudo" id="conteudo">
+            <div class="container-fluid" th:fragment="conteudo">
+
+            </div>
+        </div>
+    </div>
+    <div th:replace="layout :: scripts"></div>
+</body>
+
+</html>

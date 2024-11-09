@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="container-fluid p-2 d-flex flex-column ms-auto">
+                    <div>
+                        <h2 class="section-title">Lista de setores </h2>
+                        <p class="section-subtitle">Visualize e gerencie os setores cadastrados no sistema.</p>
+                    </div>
+                </div>
+                <table id="tabela" class="display table nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Status</th>
+                            <th class="col-1"></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Status</th>
+                            <th class="col-1"></th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr th:each="setor : ${setores}">
+                            <td th:text="${setor.nome}"></td>
+                            <td th:text="${setor.descricao}"></td>
+                            <td>
+                                <span th:if="${setor.statusSetor}" class="badge rounded-pill bg-success">Ativo</span>
+                                <span th:if="${!setor.statusSetor}" class="badge rounded-pill bg-danger">Inativo</span>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-end">
+                                    <a th:href="@{/setores/editar/{id}(id=${setor.id})}" class="btn btn-sm me-1"><i
+                                            class="bi bi-pencil-square"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+</body>
+
+</html>

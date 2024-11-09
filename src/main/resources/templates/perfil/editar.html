@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="modal" id="dados" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Informações sobre o perfil. <span class="text-danger"><i
+                                            class="bi bi-bug"></i> (EM TESTE)</span></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <label class="form-label mt-4"
+                                        th:text="${'Total de Usuários: ' + perfil.getUsuarios().stream().count()}"></label><br>
+                                    <label class="form-label mt-4"
+                                        th:text="${'Total de Permissoes: ' + perfil.permissions.stream().count()}"></label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid p-2">
+                    <div class="container-fluid p-2 d-flex flex-column  ms-auto">
+                        <h3 class="text-dark">
+                            <i class="bi bi-person-bounding-box"></i> Editar Perfil de Usuário
+                        </h3>
+                        <div class="ms-auto align-content-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/perfils">Perfis</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Editar</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#info" aria-selected="false"
+                                role="tab" tabindex="-1">Informações</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#perfil" aria-selected="true"
+                                role="tab">Gerenciar
+                                Perfis</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#usuarios" aria-selected="true"
+                                role="tab">Gerenciar
+                                Usuarios</a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#setor" aria-selected="true"
+                                role="tab">Gerenciar
+                                Setor</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#servico" aria-selected="true"
+                                role="tab">Gerenciar
+                                Serviço</a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#departamentos" aria-selected="true"
+                                role="tab">Gerenciar
+                                Departamentos</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#processo" aria-selected="true"
+                                role="tab">Gerenciar
+                                Processos</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#requerente" aria-selected="true"
+                                role="tab">Gerenciar
+                                Solicitante</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#aplicacao" aria-selected="true"
+                                role="tab">Gerenciar
+                                Aplicação</a>
+                        </li>
+                        <li class="ms-auto nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                aria-haspopup="true" aria-expanded="false"><i class="bi bi-gear"></i></a>
+                            <div class="dropdown-menu" style="">
+                                <h6 class="dropdown-header">Operações</h6>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="javascript:void(0)"
+                                    onclick="alterarStatus()">Ativar/Desativar</a>
+                                <a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
+                                    data-bs-target="#dados"><i class="bi bi-info-circle"></i> Informações
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="excluirPerfil(this)"><i
+                                        class="bi bi-trash3"></i> Excluir</a>
+                                <a class="dropdown-item" href="javascript:void(0)" onclick="duplicado(this)"><i
+                                        class="bi bi-bug"></i>TEST DUPLICADO</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade active show" id="info" role="tabpanel">
+                            <div>
+                                <label class="form-label mt-4" for="id">ID</label>
+                                <input class="form-control" id="id" name="id" type="text" readonly=""
+                                    th:value="${perfil.id}">
+                            </div>
+                            <div>
+                                <label for="nome" class="form-label mt-4">Nome</label>
+                                <input type="text" class="form-control" id="nome" name="nome"
+                                    placeholder="Nome do Perfil" autocomplete="off" th:value="${perfil.nome}">
+                            </div>
+                            <div>
+                                <label for="descricao" class="form-label mt-4">Descricao</label>
+                                <input type="text" class="form-control" id="descricao" name="descricao"
+                                    placeholder="Descricao do Perfil" autocomplete="off" th:value="${perfil.descricao}">
+                            </div>
+                            <div class="d-flex justify-content-end m-3">
+                                <a href="/perfils" class="btn btn-danger btn-sm m-2">Cancelar</a>
+                                <a href="javascript:void(0)" onclick="editarPerfil(this)"
+                                    class="btn btn-success btn-sm m-2">Salvar</a>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="perfil" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Permitir que o usuário crie novos perfis</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="PROFILE_CREATE"
+                                                    value="PROFILE_CREATE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).PROFILE_CREATE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário edite perfis existentes</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="PROFILE_EDIT"
+                                                    value="PROFILE_EDIT"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).PROFILE_EDIT)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário atribua perfis a outros usuários</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="PROFILE_ASSIGN"
+                                                    value="PROFILE_ASSIGN"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).PROFILE_ASSIGN)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário ative/desative perfis</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="PROFILE_TOGGLE"
+                                                    value="PROFILE_TOGGLE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).PROFILE_TOGGLE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário visualize a página de perfis</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="PROFILE_VIEW"
+                                                    value="PROFILE_VIEW"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).PROFILE_VIEW)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="usuarios" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Permitir que o usuário crie novos usuarios</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="USER_CREATE"
+                                                    value="USER_CREATE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).USER_CREATE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário edite usuarios existentes</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="USER_EDIT"
+                                                    value="USER_EDIT"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).USER_EDIT)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <!--      TODO PRECISA TER ATIVAR/DESATIVAR?                      -->
+                                        <td>Permitir que o usuário ative/desative usuarios</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="USER_TOGGLE"
+                                                    value="USER_TOGGLE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).USER_TOGGLE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário visualize a página de usuarios</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="USER_VIEW"
+                                                    value="USER_VIEW"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).USER_VIEW)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="setor" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Permitir que o usuário crie setores</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SECTOR_CREATE"
+                                                    value="SECTOR_CREATE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SECTOR_CREATE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário edite setores</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SECTOR_EDIT"
+                                                    value="SECTOR_EDIT"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SECTOR_EDIT)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário exclua setores</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SECTOR_DELETE"
+                                                    value="SECTOR_DELETE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SECTOR_DELETE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário ative/desative setores</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SECTOR_TOGGLE"
+                                                    value="SECTOR_TOGGLE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SECTOR_TOGGLE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário visualize setores</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SECTOR_VIEW"
+                                                    value="SECTOR_VIEW"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SECTOR_VIEW)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="servico" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Permitir que o usuário crie novos serviços</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SERVICE_CREATE"
+                                                    value="SERVICE_CREATE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SERVICE_CREATE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário edite serviços</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SERVICE_EDIT"
+                                                    value="SERVICE_EDIT"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SERVICE_EDIT)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário exclua serviços</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SERVICE_DELETE"
+                                                    value="SERVICE_DELETE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SERVICE_DELETE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário ative/desative serviços</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SERVICE_TOGGLE"
+                                                    value="SERVICE_TOGGLE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SERVICE_TOGGLE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário visualize serviços</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="SERVICE_VIEW"
+                                                    value="SERVICE_VIEW"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).SERVICE_VIEW)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="departamentos" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Permitir que o usuário crie novos departamentos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="DEPARTMENT_CREATE"
+                                                    value="DEPARTMENT_CREATE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).DEPARTMENT_CREATE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário edite departamentos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="DEPARTMENT_EDIT"
+                                                    value="DEPARTMENT_EDIT"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).DEPARTMENT_EDIT)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário exclua departamentos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="DEPARTMENT_DELETE"
+                                                    value="DEPARTMENT_DELETE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).DEPARTMENT_DELETE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário ative/desative departamentos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="DEPARTMENT_TOGGLE"
+                                                    value="DEPARTMENT_TOGGLE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).DEPARTMENT_TOGGLE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário atribua departamentos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="DEPARTMENT_ASSIGN"
+                                                    value="DEPARTMENT_ASSIGN"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).DEPARTMENT_ASSIGN)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário visualize departamentos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="DEPARTMENT_VIEW"
+                                                    value="DEPARTMENT_VIEW"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).DEPARTMENT_VIEW)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="processo" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Permitir que o usuário crie processos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="PROCESS_CREATE"
+                                                    value="PROCESS_CREATE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).PROCESS_CREATE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário edite processos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="PROCESS_EDIT"
+                                                    value="PROCESS_EDIT"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).PROCESS_EDIT)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário altere o status dos processos</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="PROCESS_STATUS_CHANGE" value="PROCESS_STATUS_CHANGE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).PROCESS_STATUS_CHANGE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="requerente" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Permitir que o usuário edite o requerente</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="REQUESTER_EDIT"
+                                                    value="REQUESTER_EDIT"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).REQUESTER_EDIT)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Permitir que o usuário altere a senha do requerente</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="REQUESTER_PASSWORD_CHANGE" value="REQUESTER_PASSWORD_CHANGE"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).REQUESTER_PASSWORD_CHANGE)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="aplicacao" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Permissão</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr>
+                                        <td>Permitir que o usuário edite a aplicação</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="APPLICATION_EDIT"
+                                                    value="APPLICATION_EDIT"
+                                                    th:checked="${permissions.contains(T(cloud.masteroflie.sgpa.enums.PermissionsRole).APPLICATION_EDIT)}">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+    <script th:src="@{/js/perfils.js}"></script>
+    <script th:src="@{/js/permissions.js}"></script>
+</body>
+
+</html>

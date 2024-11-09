@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="container-fluid p-2 d-flex flex-column ms-auto">
+                    <div>
+                        <h2 class="section-title">Lista de Processos</h2>
+                        <p class="section-subtitle">Visualize e gerencie os processos dos departamentos aos quais você
+                            está
+                            vinculado.</p>
+                    </div>
+                </div>
+                <table id="tabela" class="display table nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Protocolo</th>
+                            <th class="text-center">Serviço</th>
+                            <th class="text-center">Departamento</th>
+                            <th class="text-center">Solicitante</th>
+                            <th class="text-center">Usuario</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Data de Abertura</th>
+                            <th class="col-1"></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th class="text-center">Protocolo</th>
+                            <th class="text-center">Serviço</th>
+                            <th class="text-center">Departamento</th>
+                            <th class="text-center">Solicitante</th>
+                            <th class="text-center">Usuario</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Data de Abertura</th>
+                            <th class="col-1"></th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr th:each="processo : ${processos}">
+                            <td class="text-center" th:text="${processo.protocolo + '/' + processo.vigencia}"></td>
+                            <td class="text-center" th:text="${processo.getServico().nome}"></td>
+                            <td class="text-center" th:text="${processo.departamento.nome}"></td>
+                            <td class="text-center" th:text="${processo.getRequerente().name}"></td>
+                            <td class="text-center" th:text="${processo.getUsuario().name}"></td>
+                            <td>
+                                <span
+                                    th:if="${processo != null and processo.status != null and processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).ANDAMENTO}"
+                                    class="badge rounded-pill bg-warning">Andamento</span>
+                                <span
+                                    th:if="${processo != null and processo.status != null and processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).CONCLUIDO}"
+                                    class="badge rounded-pill bg-success">Concluído</span>
+                                <span
+                                    th:if="${processo != null and processo.status != null and processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).CANCELADO}"
+                                    class="badge rounded-pill bg-danger">Cancelado</span>
+                                <span
+                                    th:if="${processo != null and processo.status != null and processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).ARQUIVADO}"
+                                    class="badge rounded-pill bg-secondary">Arquivado</span>
+                                <span th:if="${processo != null and processo.status == null}"
+                                    class="badge rounded-pill bg-dark">Erro Interno</span>
+                            </td>
+                            <td class="text-center"
+                                th:text="${processo.dataCriacao != null ? #temporals.format(processo.dataCriacao.toLocalDate(), 'dd/MM/yyyy') : 'Data não disponível'}">
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-end">
+                                    <a th:href="@{/processos/{id}(id=${processo.uuid})}" class="btn me-1"><i
+                                            class="bi bi-eye"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.min.js"></script>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="">
+                    <div class="container-fluid p-2 d-flex flex-column  ms-auto">
+                        <h3 class="text-dark">
+                            <i class="bi bi-chat-left-text-fill"></i> Utilmas Informaçoes
+                        </h3>
+                        <div class="ms-auto align-content-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Noticias</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="container-fluid d-flex justify-content-center">
+                        <p>NÃO IMPLEMENTADO</p>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+</body>
+
+</html>

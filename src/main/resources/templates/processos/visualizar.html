@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="container-fluid p-3" th:fragment="conteudo">
+                    <div class="container-fluid p-2 d-flex flex-column  ms-auto">
+                        <h3 class="text-dark">
+                            <i class="bi bi-eye"></i> Visualizar Processo
+                        </h3>
+                        <div class="ms-auto align-content-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/processos">Processos</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Visualizar</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#info" aria-selected="false"
+                                role="tab" tabindex="-1">Informações</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#anexo" aria-selected="false" role="tab"
+                                tabindex="-1">Arquivos</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#movimentacao" aria-selected="false"
+                                role="tab" tabindex="-1">Movimentação</a>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane fade show active" id="info" role="tabpanel">
+                            <div>
+                                <label for="id" class="form-label mt-4">ID</label>
+                                <input type="text" class="form-control" id="id" name="id" placeholder="ID do processo"
+                                    th:value="${processo.uuid}" readonly="">
+
+                            </div>
+                            <div>
+                                <label for="departamentoID" class="form-label mt-4">Departamento</label>
+                                <input type="text" class="form-control" id="departamentoID" name="departamentoID"
+                                    placeholder="Departamento do Processo" th:value="${processo.getDepartamento().nome}"
+                                    readonly="">
+                            </div>
+                            <div>
+                                <label for="servicoID" class="form-label mt-4">Servico</label>
+                                <input type="text" class="form-control" id="servicoID" name="servicoID"
+                                    placeholder="Serviço do Processo" th:value="${processo.getServico().nome}"
+                                    readonly="">
+                            </div>
+                            <div>
+                                <label for="solicitanteID" class="form-label mt-4">Solicitante</label>
+                                <input type="text" class="form-control" id="solicitanteID" name="solicitanteID"
+                                    placeholder="Solicitante do Processo" th:value="${processo.getRequerente().name}"
+                                    readonly="">
+                            </div>
+                            <div>
+                                <label for="descricao" class="form-label mt-4">Descricao</label>
+                                <textarea type="text" class="form-control" id="descricao" name="descricao"
+                                    placeholder="Descricao do Setor" autocomplete="off" maxlength="255" required
+                                    th:text="${processo.descricao}" th:value="${processo.descricao}"
+                                    readonly=""></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="movimentacao" role="tabpanel">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Departamento de Origem</th>
+                                        <th>Departamento de Destino</th>
+                                        <th>Usuario</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Departamento de Origem</th>
+                                        <th>Departamento de Destino</th>
+                                        <th>Usuario</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr th:each="movimento : ${movimentacoes}">
+                                        <td th:text="${movimento.departamentoOrigem.nome}"></td>
+                                        <td th:text="${movimento.departamentoDestino.nome}"></td>
+                                        <td th:text="${movimento.usuarioMovimentacao.name}"></td>
+                                        <td th:text="${movimento.descricao}"></td>
+                                        <td class="text-center"
+                                            th:text="${movimento.dataCriacao != null ? #temporals.format(movimento.dataCriacao, 'dd/MM/yyyy HH:mm') : 'Data não disponível'}">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="anexo" role="tabpanel">
+                            <hr>
+                            <div class="container-fluid overflow-x-auto">
+                                <table class="table table-bordered" id="arquivos-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome do arquivo</th>
+                                            <th class="col-1">Data</th>
+                                            <th>Usuário</th>
+                                            <th class="col-1">Acesso Externo</th>
+                                            <th class="col-1"></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Nome do arquivo</th>
+                                            <th class="col-1">Data</th>
+                                            <th>Usuário</th>
+                                            <th class="col-1">Acesso Externo</th>
+                                            <th class="col-1"></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:each="arquivo : ${processo.getArquivos()}">
+                                            <td th:text="${arquivo.getNomeArquivo()}"></td>
+                                            <td
+                                                th:text="${arquivo.dataCriacao != null ? #temporals.format(arquivo.dataCriacao, 'dd/MM/yyyy HH:mm') : 'Data não disponível'}">
+                                            </td>
+                                            <td th:text="${arquivo.getUsuario().name}"></td>
+                                            <td class="d-flex justify-content-center">
+                                                <span th:if="${!arquivo.acessoExterno}" class="badge bg-success">Acesso
+                                                    Bloqueado</span>
+                                                <span th:if="${arquivo.acessoExterno}" class="badge bg-danger">Acesso
+                                                    Liberado</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-sm"
+                                                        onclick="downloadArquivo(this)" th:value="${arquivo.id}">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+</body>
+
+</html>

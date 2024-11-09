@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head th:replace="~{layout :: head}">
+    <title th:fragment="~{title}">Meus Processos</title>
+</head>
+
+<body>
+    <header th:replace="~{layout :: menu}"></header>
+    <section class="main-content">
+        <div id="side-menu" class="side-menu">
+            <nav th:replace="~{layout :: nav}"></nav>
+        </div>
+        <main id="conteudo" class="content-wrapper">
+            <div class="content" th:fragment="conteudo">
+                <div class="modal" id="movimentar" tabindex="-1">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Movimentação de Processo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <label for="departamentoMovimento" class="form-label mt-4">Departamento</label>
+                                    <select class="form-select" id="departamentoMovimento" name="departamentoMovimento"
+                                        style="width: 100%;" required>
+                                        <option value="disabled" disabled selected>Selecione um Departamento</option>
+                                        <option th:if="${!departamento.processos.contains(processo)}"
+                                            th:each="departamento : ${departamentos}" th:value="${departamento.id}"
+                                            th:text="${departamento.nome}"></option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="descricaoMovimentacao" class="form-label mt-4">Descrição</label>
+                                    <textarea class="form-control" id="descricaoMovimentacao"
+                                        name="descricaoMovimentacao" placeholder="Descrição da Operação"
+                                        autocomplete="off" maxlength="255"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" onclick="movimentarProcesso(this)"
+                                    data-bs-dismiss="modal">Movimentar Processo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="container-fluid p-3" th:fragment="conteudo">
+                        <div class="container-fluid p-2 d-flex flex-column  ms-auto">
+                            <h3 class="text-dark">
+                                <i class="bi bi-file-earmark-text"></i> Editar Processo
+                            </h3>
+                            <div class="ms-auto align-content-center">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/processos">Processos</a></li>
+                                        <li class="breadcrumb-item"><a href="/processos/analise">Analise</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#info" aria-selected="false"
+                                    role="tab" tabindex="-1">Informações</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#anexo" aria-selected="false" role="tab"
+                                    tabindex="-1">Arquivos</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" href="#movimentacao" aria-selected="false"
+                                    role="tab" tabindex="-1">Movimentação</a>
+                            </li>
+                            <li class="ms-auto nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                    aria-haspopup="true" aria-expanded="false"><i class="bi bi-gear"></i></a>
+                                <div class="dropdown-menu" style="">
+                                    <h6 class="dropdown-header">Operações</h6>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item " href="javascript:void(0)" data-bs-toggle="modal"
+                                        data-bs-target="#movimentar"><i class="bi bi-shuffle"></i> Movimentar
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                        th:onclick="protocolo('[[${processo.departamento.nome}]]', '[[${processo.protocolo}]]', '[[${processo.vigencia}]]', '[[${processo.getRequerente().name}]]', '[[${processo.dataCriacao != null ? #temporals.format(processo.dataCriacao.toLocalDate(), 'dd/MM/yyyy') : 'Data não disponível'}]]', '[[${processo.getServico().nome}]]')"
+                                        class="dropdown-item"><i class="bi bi-eye"></i> Protocolo</a>
+
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header">Status</h6>
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        onclick="statusProcesso(this,'ANDAMENTO')"
+                                        th:if="${!(processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).ANDAMENTO)}"
+                                        value="ANDAMENTO">
+                                        <i class="bi bi-arrow-right-circle"></i>
+                                        Em Análise
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        onclick="statusProcesso(this,'ARQUIVADO')"
+                                        th:if="${!(processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).ARQUIVADO)}"
+                                        value="ARQUIVADO">
+                                        <i class="bi bi-file-earmark-zip"></i>
+                                        Arquivar
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        onclick="statusProcesso(this,'CONCLUIDO')"
+                                        th:if="${!(processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).CONCLUIDO)}"
+                                        value="CONCLUIDO">
+                                        <i class="bi bi-check-circle"></i>
+                                        Concluir
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        onclick="statusProcesso(this,'CANCELADO')"
+                                        th:if="${!(processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).CANCELADO)}"
+                                        value="CANCELADO">
+                                        <i class="bi bi-x-circle"></i>
+                                        Cancelar
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade show active" id="info" role="tabpanel">
+                                <div>
+                                    <label for="id" class="form-label mt-4">ID</label>
+                                    <input type="text" class="form-control" id="id" name="id"
+                                        placeholder="ID do processo" th:value="${processo.uuid}" readonly></input>
+                                </div>
+                                <div>
+                                    <label for="departamentoID" class="form-label mt-4">Departamento</label>
+                                    <select class="form-select" id="departamentoID" name="departamentoID" required
+                                        style="width: 100%;" readonly="">
+                                        <option value="disabled" disabled selected>Selecione um Departamento</option>
+                                        <option th:each="departamento : ${departamentos}" th:value="${departamento.id}"
+                                            th:text="${departamento.nome}"
+                                            th:selected="${departamento.processos.contains(processo)}"></option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="servicoID" class="form-label mt-4">Servico</label>
+                                    <select class="form-select" id="servicoID" name="servicoID" required
+                                        style="width: 100%;" readonly="">
+                                        <option value="disabled" disabled selected>Selecione um Servico</option>
+                                        <option th:each="servico : ${servicos}" th:value="${servico.id}"
+                                            th:text="${servico.nome}"
+                                            th:selected="${servico.processos.contains(processo)}"></option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="solicitanteID" class="form-label mt-4">Solicitante</label>
+                                    <select class="form-select" id="solicitanteID" name="solicitanteID" required
+                                        style="width: 100%;" readonly="">
+                                        <option value="disabled" disabled selected>Selecione um Solicitante</option>
+                                        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}"
+                                            th:text="${usuario.name + '   ' + usuario.cpfCnpj}"
+                                            th:selected="${usuario.requrente.contains(processo)}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="descricao" class="form-label mt-4">Descricao</label>
+                                    <textarea type="text" class="form-control" id="descricao" name="descricao"
+                                        placeholder="Descricao do Setor" autocomplete="off" maxlength="255" required
+                                        th:text="${processo.descricao}" th:value="${processo.descricao}"></textarea>
+                                </div>
+                                <div class="d-flex justify-content-end m-3">
+                                    <a href="/processos/analise" class="btn btn-danger btn-sm m-2">Cancelar</a>
+                                    <a href="javascript:void(0)" class="btn btn-success btn-sm m-2"
+                                        onclick="editarProcesso(this)">Salvar</a>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="movimentacao" role="tabpanel">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Departamento de Origem</th>
+                                            <th>Departamento de Destino</th>
+                                            <th>Usuario</th>
+                                            <th>Descrição</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Departamento de Origem</th>
+                                            <th>Departamento de Destino</th>
+                                            <th>Usuario</th>
+                                            <th>Descrição</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:each="movimento : ${movimentacoes}">
+                                            <td th:text="${movimento.departamentoOrigem.nome}"></td>
+                                            <td th:text="${movimento.departamentoDestino.nome}"></td>
+                                            <td th:text="${movimento.usuarioMovimentacao.name}"></td>
+                                            <td th:text="${movimento.descricao}"></td>
+                                            <td class="text-center"
+                                                th:text="${movimento.dataCriacao != null ? #temporals.format(movimento.dataCriacao, 'dd/MM/yyyy HH:mm') : 'Data não disponível'}">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="anexo" role="tabpanel">
+                                <div class="container-fluid">
+                                    <div class="upload-container" id="upload-container">
+                                        <input type="file" id="file-input" hidden />
+                                        <label for="file-input" id="upload-label">
+                                            Arraste e solte o arquivo aqui ou clique para selecionar
+                                        </label>
+                                        <div id="progress-bar">
+                                            <div id="progress"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="container-fluid overflow-x-auto">
+                                    <table class="table table-bordered" id="arquivos-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nome do arquivo</th>
+                                                <th class="col-1">Data</th>
+                                                <th>Usuário</th>
+                                                <th class="col-1">Acesso Externo</th>
+                                                <th class="col-1"></th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Nome do arquivo</th>
+                                                <th class="col-1">Data</th>
+                                                <th>Usuário</th>
+                                                <th class="col-1">Acesso Externo</th>
+                                                <th class="col-1"></th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            <tr th:each="arquivo : ${processo.getArquivos()}">
+                                                <td th:text="${arquivo.getNomeArquivo()}"></td>
+                                                <td
+                                                    th:text="${arquivo.dataCriacao != null ? #temporals.format(arquivo.dataCriacao, 'dd/MM/yyyy HH:mm') : 'Data não disponível'}">
+                                                </td>
+                                                <td th:text="${arquivo.getUsuario().name}"></td>
+                                                <td class="d-flex justify-content-center">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input"
+                                                            title="Arquivo disponivel no portal de solicitaçoes"
+                                                            type="checkbox"
+                                                            th:checked="${arquivo.acessoExterno != null ? arquivo.acessoExterno : false}"
+                                                            onclick="acessoExterno(this)" th:value="${arquivo.id}">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-center">
+                                                        <!--                                        <a href="javascript:void(0)" class="btn btn-sm"><i class="bi bi-eye"></i></a> download ja e view-->
+                                                        <button type="button" class="btn btn-sm"
+                                                            onclick="downloadArquivo(this)" th:value="${arquivo.id}">
+                                                            <i class="bi bi-download"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm text-danger"
+                                                            onclick="deleteFile(this)" th:value="${arquivo.id}">
+                                                            <i class="bi bi-trash3"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div th:replace="~{layout :: footer}">
+            </div>
+        </main>
+    </section>
+    <div th:replace="~{layout :: scripts}"></div>
+    <script th:src="@{/js/protocolo.js}"></script>
+    <script th:src="@{/js/processo.js}"></script>
+    <script th:src="@{/js/file.js}"></script>
+    <script>
+        $("#servicoID").select2({
+            theme: "bootstrap-5",
+            language: "pt-BR"
+        });
+        $("#solicitanteID").select2({
+            theme: "bootstrap-5",
+            language: "pt-BR"
+        });
+        $("#departamentoID").select2({
+            theme: "bootstrap-5",
+
+            language: "pt-BR"
+        });
+    </script>
+
+</body>
+
+</html>
