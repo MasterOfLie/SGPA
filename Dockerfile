@@ -1,7 +1,5 @@
-LABEL authors="Matheus"
-
 # Etapa 1: Construir o aplicativo
-FROM maven:3.9.1-openjdk-21 as build
+FROM maven:3.9.9-amazoncorretto-21-alpine AS build
 
 # Defina o diretório de trabalho dentro do container
 WORKDIR /app
@@ -18,10 +16,10 @@ COPY src /app/src
 # Compile o projeto e gere o arquivo JAR
 RUN mvn clean package -DskipTests
 
-# Etapa 2: Configurar o ambiente para rodar o aplicativo
-FROM openjdk:21-jre-slim as runtime
+# Etapa 2: Imagem final para rodar a aplicação
+FROM openjdk:21-jdk-slim
 
-# Defina o diretório de trabalho
+# Defina o diretório de trabalho dentro do container
 WORKDIR /app
 
 # Copie o JAR gerado da etapa de build
