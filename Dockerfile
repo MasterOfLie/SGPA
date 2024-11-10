@@ -26,7 +26,7 @@ WORKDIR /app
 COPY --from=build /app/target/sgpa-0.0.1-SNAPSHOT.jar /app/sgpa.jar
 
 # Exponha a porta que a aplicação vai rodar
-EXPOSE 8080
+EXPOSE ${SERVER_PORT}
 
 # Defina o comando de execução da aplicação
 ENTRYPOINT ["java", "-jar", "/app/sgpa.jar"]
