@@ -17,5 +17,6 @@ public interface UsuarioService {
     List<Usuario> listarSolicitantes() throws Exception;
     void alterarSenha(String senha, UUID usuarioID) throws Exception;
     void atualizarSolicitante(Usuario usuario, Authentication authentication) throws Exception;
+    Long countUsuarios();
 
 }

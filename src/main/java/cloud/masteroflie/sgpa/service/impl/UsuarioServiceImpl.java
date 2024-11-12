@@ -1,22 +1,24 @@
 package cloud.masteroflie.sgpa.service.impl;
 
 import cloud.masteroflie.sgpa.dto.UsuarioDTO;
+import cloud.masteroflie.sgpa.enums.PermissionsRole;
 import cloud.masteroflie.sgpa.models.Perfil;
-import cloud.masteroflie.sgpa.models.Servico;
 import cloud.masteroflie.sgpa.models.Usuario;
 import cloud.masteroflie.sgpa.repository.PerfilRepository;
 import cloud.masteroflie.sgpa.repository.UsuarioRepository;
 import cloud.masteroflie.sgpa.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import static cloud.masteroflie.sgpa.controllers.AuthController.isFirstAccess;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -24,20 +26,33 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private PerfilRepository perfilRepository;
-    @Autowired
-    private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
 
     @Override
     public void cadastrarUsuario(Usuario usuario) throws Exception {
+        if (isFirstAccess) {
+            if (usuarioRepository.count() == 0) {
+                Perfil perfil = new Perfil();
+                perfil.setNome("Administrador");
+                perfil.setDescricao("Perfil Administrador Inicial");
+                List<PermissionsRole> listPermissionsRole = new ArrayList<>();
+                listPermissionsRole.addAll(Arrays.asList(PermissionsRole.values()));
+                perfil.setPermissions(listPermissionsRole);
+                perfilRepository.save(perfil);
+                usuario.setPerfil(perfil);
+                isFirstAccess = false;
+            }else{
+                isFirstAccess = false;
+            }
+        }
         if (usuarioRepository.findByCpfCnpj(usuario.getCpfCnpj()) != null) {
             throw new Exception("Já exite um usuario com esse CPF/CNPJ.");
         }
         if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
             throw new Exception("Já exite um usuario com esse Email.");
         }
+
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuarioRepository.save(usuario);
     }
@@ -131,5 +146,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         }else {
             throw new Exception("Você não possui permissão para alterar solicitante.");
         }
+    }
+
+    @Override
+    public Long countUsuarios() {
+        return usuarioRepository.count();
     }
 }
