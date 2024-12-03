@@ -38,7 +38,7 @@
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="/portal/processos">Meus Processos
+                            <a class="nav-link" href="/portal/processos">Meus Processos
                             </a>
                         </li>
                         <li class="nav-item">
@@ -107,7 +107,7 @@
                         </td>
                         <td class="text-center">
                             <div class="d-flex justify-content-end">
-                                <a th:href="@{/processos/editar/{id}(id=${processo.uuid})}" class="btn btn-sm me-1"><i
+                                <a th:href="@{/portal/processo/{id}(id=${processo.uuid})}" class="btn btn-sm me-1"><i
                                         class="bi bi-eye"></i></a>
                             </div>
                         </td>
@@ -153,7 +153,9 @@
 
             table.on('dblclick', 'tbody tr', function () {
                 let uuid = $(this).data('uuid');
-                alert('Você clicou no processo com UUID: ' + uuid);
+                setTimeout(() => {
+                    window.location.href = "../portal/processo/" + uuid;
+                }, 400);
             });
         });
     </script>

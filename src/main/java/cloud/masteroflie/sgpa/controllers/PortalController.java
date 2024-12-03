@@ -45,7 +45,7 @@ public class PortalController extends BaseController {
         model.addAttribute("processos", processoService.meusProcessos(auth));
         return "portal/criar";
     }
-    @GetMapping("/processo/visualizar/{idProcesso}")
+    @GetMapping("/processo/{idProcesso}")
     public String visualizarProcesso(Model model, Authentication auth, @PathVariable UUID idProcesso) {
         usuarioLogado(model);
         try {

@@ -1,4 +1,5 @@
 package cloud.masteroflie.sgpa.service.impl;
+import cloud.masteroflie.sgpa.config.AzureBlobConfig;
 import cloud.masteroflie.sgpa.models.Arquivos;
 import cloud.masteroflie.sgpa.models.Processo;
 import cloud.masteroflie.sgpa.models.Usuario;
@@ -8,6 +9,7 @@ import cloud.masteroflie.sgpa.repository.UsuarioRepository;
 import com.azure.storage.blob.models.BlobHttpHeaders;
 import com.azure.storage.blob.sas.BlobSasPermission;
 import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -20,22 +22,12 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AzureServiceImpl implements AzureService {
-    @Autowired
-    private ProcessoRepository processoRepository;
-
-    @Autowired
-    private ArquivoRepository arquivoRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Value("${azure.storage.connection-string}")
-    private String connectionString;
-
-    @Value("${azure.storage.container-name}")
-    private String containerName;
-
+    private final ProcessoRepository processoRepository;
+    private final ArquivoRepository arquivoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final AzureBlobConfig azureBlobConfig;
 
     @Override
     public Arquivos upload(MultipartFile file, UUID idProcesso, Authentication authentication) throws Exception {
@@ -47,29 +39,13 @@ public class AzureServiceImpl implements AzureService {
         }
         String originalFilename = file.getOriginalFilename();
         String newName = processo.getId() + "_" + UUID.randomUUID().toString() + "_" + originalFilename;
-
         arquivo.setNomeArquivo(originalFilename);
         arquivo.setBlobName(newName);
         arquivo.setProcesso(processo);
         arquivo.setUsuario(usuario);
         arquivoRepository.save(arquivo);
-
-        // Cria o BlobServiceClient usando a connection string
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                .connectionString(connectionString)
-                .buildClient();
-
-        // Cria o container se não existir
-        BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
-        if (!containerClient.exists()) {
-            containerClient.create();
-        }
-
-        // Cria o BlobClient
-        BlobClient blobClient = containerClient.getBlobClient(newName);
-
+        BlobClient blobClient = azureBlobConfig.blobClient(newName);
         BlobHttpHeaders headers = new BlobHttpHeaders().setContentType(file.getContentType());
-        // Faz o upload do arquivo
         blobClient.upload(file.getInputStream(), file.getSize(), true);
         blobClient.setHttpHeaders(headers);
         return arquivo;
@@ -77,33 +53,22 @@ public class AzureServiceImpl implements AzureService {
 
     @Override
     public String viewFile(String filename) throws Exception {
-        // Cria o BlobServiceClient
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                .connectionString(connectionString)
-                .buildClient();
-
-        // Cria o BlobClient
-        BlobClient blobClient = blobServiceClient.getBlobContainerClient(containerName).getBlobClient(filename);
-
-        // Gerar o SAS token para o blob
+        BlobClient blobClient = azureBlobConfig.blobClient(filename);
         BlobServiceSasSignatureValues values = new BlobServiceSasSignatureValues(
-                OffsetDateTime.now().plusHours(1), // Expira em 1 hora
-                new BlobSasPermission().setReadPermission(true) // Permissão de leitura
+                OffsetDateTime.now().plusHours(1),
+                new BlobSasPermission().setReadPermission(true)
         );
 
         String sasToken = blobClient.generateSas(values);
         return blobClient.getBlobUrl() + "?" + sasToken;
     }
     public String deleteFile(String filename) throws Exception {
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                .connectionString(connectionString)
-                .buildClient();
-        BlobClient blobClient = blobServiceClient.getBlobContainerClient(containerName).getBlobClient(filename);
+        BlobClient blobClient = azureBlobConfig.blobClient(filename);
         if (blobClient.exists()) {
             blobClient.delete();
             return "Arquivo deletado com sucesso";
         }else {
-            return "Arquivo deletado com sucesso";
+            return "Arquivo não encontrado.";
         }
     }
 }
