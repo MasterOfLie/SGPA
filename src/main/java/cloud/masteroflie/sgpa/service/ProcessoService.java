@@ -2,6 +2,7 @@ package cloud.masteroflie.sgpa.service;
 
 import cloud.masteroflie.sgpa.dto.MovimentacaoDTO;
 import cloud.masteroflie.sgpa.dto.ProcessoDTO;
+import cloud.masteroflie.sgpa.dto.ProcessoPortalDTO;
 import cloud.masteroflie.sgpa.models.Processo;
 import org.springframework.security.core.Authentication;
 
@@ -18,4 +19,5 @@ public interface ProcessoService {
     Processo buscarProcesso(UUID idProcesso) throws Exception;
     void movimentarProcesso(MovimentacaoDTO movimentacaoDTO, Authentication authentication) throws Exception;
     String alterarStatus(ProcessoDTO processoDTO, Authentication authentication) throws Exception;
+    Processo criarProcessoPortal(ProcessoPortalDTO processoPortalDTO, Authentication authentication) throws Exception;
 }

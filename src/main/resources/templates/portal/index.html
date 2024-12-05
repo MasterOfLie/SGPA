@@ -32,7 +32,7 @@
                     </ul>
                     <div class="ms-auto">
                         <div class="user-name">
-                            <a href="#" th:text="${usuarioLogado}">Matheus Henrique Alves Nascimento Ferreira</a>
+                            <a href="#" th:text="${usuarioLogado}"></a>
                             <a href="/logout" class="btn btn-danger btn-sm"> Sair<i
                                     class="bi bi-box-arrow-right"></i></a>
                         </div>
@@ -69,7 +69,7 @@
                                         <td th:text="${servico.descricao}"></td>
                                         <td class="text-center" th:if="${servico.aberturaOnline}">
                                             <div class="form-check form-switch">
-                                                <a href="">Solicitar Online</a>
+                                                <a th:href="@{/portal/processos/criar/{id}(id=${servico.getId()})}">Solicitar Online</a>
                                             </div>
                                         </td>
                                         <td class="text-center" th:if="${!servico.aberturaOnline}">

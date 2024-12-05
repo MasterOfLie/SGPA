@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Processo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

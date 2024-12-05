@@ -3,7 +3,9 @@ package cloud.masteroflie.sgpa.controllers;
 import cloud.masteroflie.sgpa.config.BaseController;
 import cloud.masteroflie.sgpa.models.Processo;
 import cloud.masteroflie.sgpa.service.ProcessoService;
+import cloud.masteroflie.sgpa.service.ServicoService;
 import cloud.masteroflie.sgpa.service.SetorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.UUID;
 
+@Slf4j
 @Controller
 @RequestMapping("/portal")
 public class PortalController extends BaseController {
@@ -23,6 +26,8 @@ public class PortalController extends BaseController {
 
     @Autowired
     private ProcessoService processoService;
+    @Autowired
+    private ServicoService servicoService;
 
     @GetMapping
     public String index(Model model) {
@@ -36,13 +41,14 @@ public class PortalController extends BaseController {
         model.addAttribute("processos", processoService.meusProcessos(auth));
         return "portal/processos";
     }
-    @GetMapping("/processos/criar")
-    public String portalCriarProcesso(Model model, Authentication auth) {
+    @GetMapping("/processos/criar/{servicoID}")
+    public String portalCriarProcesso(Model model,@PathVariable UUID servicoID, Authentication auth) {
         usuarioLogado(model);
-        for (Processo processo : processoService.meusProcessos(auth)){
-            model.addAttribute("processo", processo);
+        try {
+            model.addAttribute("servico", servicoService.buscarServico(servicoID));
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
-        model.addAttribute("processos", processoService.meusProcessos(auth));
         return "portal/criar";
     }
     @GetMapping("/processo/{idProcesso}")

@@ -47,7 +47,7 @@
                     </ul>
                     <div class="ms-auto">
                         <div class="user-name">
-                            <a href="#" th:text="${usuarioLogado}">Matheus Henrique Alves Nascimento Ferreira</a>
+                            <a href="#" th:text="${usuarioLogado}"></a>
                             <a href="/logout" class="btn btn-danger btn-sm"> Sair<i
                                     class="bi bi-box-arrow-right"></i></a>
                         </div>
@@ -98,6 +98,9 @@
                                 class="badge rounded-pill bg-success">Concluido</span>
                             <span th:if="${processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).CANCELADO}"
                                 class="badge rounded-pill bg-danger">Cancelado</span>
+                            <span
+                                    th:if="${processo != null and processo.status != null and processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).ARQUIVADO}"
+                                    class="badge rounded-pill bg-secondary">Arquivado</span>
                             <span th:if="${processo.status == null}"
                                   class="badge rounded-pill bg-dark">Erro Interno</span>
                         </td>

@@ -51,7 +51,7 @@
                             <td class="text-center" th:text="${processo.getServico().nome}"></td>
                             <td class="text-center" th:text="${processo.departamento.nome}"></td>
                             <td class="text-center" th:text="${processo.getRequerente().name}"></td>
-                            <td class="text-center" th:text="${processo.getUsuario().name}"></td>
+                            <td class="text-center" th:text="${processo.usuario?.name ?: 'Solicitado Online'}"></td>
                             <td>
                                 <span
                                     th:if="${processo != null and processo.status != null and processo.status == T(cloud.masteroflie.sgpa.enums.ProcessoStatus).ANDAMENTO}"

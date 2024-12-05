@@ -2,6 +2,7 @@ package cloud.masteroflie.sgpa.service.impl;
 
 import cloud.masteroflie.sgpa.dto.MovimentacaoDTO;
 import cloud.masteroflie.sgpa.dto.ProcessoDTO;
+import cloud.masteroflie.sgpa.dto.ProcessoPortalDTO;
 import cloud.masteroflie.sgpa.enums.ProcessoStatus;
 import cloud.masteroflie.sgpa.models.*;
 import cloud.masteroflie.sgpa.repository.*;
@@ -60,7 +61,7 @@ public class ProcessoServiceImpl implements ProcessoService {
     }
 
     @Override
-    public List<Processo> emAnalise(Authentication auth) throws Exception{
+    public List<Processo> emAnalise(Authentication auth) throws Exception {
         Usuario usuario = (Usuario) auth.getPrincipal();
         Usuario usuarioAtualizadoo = usuarioRepository.findById(usuario.getId()).orElseThrow(() -> new Exception("Usuario nao encontrado"));
         List<Processo> processosAnalise = new ArrayList<>();
@@ -134,5 +135,17 @@ public class ProcessoServiceImpl implements ProcessoService {
         } else {
             throw new Exception("Você não possui permissão para movimentar um processo");
         }
+    }
+
+    @Override
+    public Processo criarProcessoPortal(ProcessoPortalDTO processoPortalDTO, Authentication authentication) throws Exception {
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        Servico servico = servicoRepository.findById(processoPortalDTO.getServicoID()).orElse(null);
+        Processo processo = new Processo();
+        processo.setDescricao(processoPortalDTO.getDescricao());
+        processo.setRequerente(usuario);
+        processo.setDepartamento(servico.getDepartamento());
+        processo.setServico(servico);
+        return processoRepository.save(processo);
     }
 }
