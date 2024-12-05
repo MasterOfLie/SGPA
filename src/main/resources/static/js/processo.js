@@ -86,7 +86,6 @@ function novoProcesso(event) {
         }
     }
 }
-
 function movimentarProcesso(event) {
     const processoID = document.getElementById("id").value
     const destino = document.getElementById("departamentoMovimento").value
@@ -160,7 +159,6 @@ function movimentarProcesso(event) {
         })
 
 }
-
 function duplicadoProcesso(event) { //TODO BUG? CORRIGIR FUTURAMENTE
     function enviarDuasRequisicoesSimultaneas() {
         const descricao = document.getElementById("descricao").value
@@ -429,6 +427,91 @@ function acessoExterno(event){
                 });
             }
         })
+}
+function editarProcesso(event) {
+    const processoID = document.getElementById("id").value
+    const descricao = document.getElementById("descricao").value
+    const departamentoID = document.getElementById("departamentoID").value
+    const servicoID = document.getElementById("servicoID").value
+
+    if (departamentoID === "disabled") {
+        Swal.fire({
+            toast: true,
+            position: 'bottom-end',
+            icon: 'error',
+            title: 'Digite um Nome ao Servico!',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    } else {
+        if (solicitanteID === "disabled" || servicoID === "servicoID") {
+            Swal.fire({
+                toast: true,
+                position: 'bottom-end',
+                icon: 'error',
+                title: 'Você deve selecionar o Departamento, Solicitante e Servico para continuar!',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        } else {
+            const conteudo = {
+                processoID : processoID,
+                descricao: descricao,
+                departamentoID: departamentoID,
+                servicoID: servicoID
+            }
+            const cabecalho =
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "PUT",
+                    body: JSON.stringify(conteudo)
+                }
+            fetch("/api/processos/editar", cabecalho)
+                .then(response => {
+                    if (!response.ok) {
+                        Swal.fire({
+                            toast: true,
+                            position: 'bottom-end',
+                            icon: 'error',
+                            title: 'Erro inesperado no servidor!',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    } else {
+                        return response.json()
+                    }
+                })
+                .then(dados => {
+                    if (dados.OK) {
+                        Swal.fire({
+                            toast: true,
+                            position: 'bottom-end',
+                            icon: 'success',
+                            title: dados.OK,
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    } else {
+                        Swal.fire({
+                            toast: true,
+                            position: 'bottom-end',
+                            icon: 'error',
+                            title: dados.Error,
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    }
+                })
+        }
+    }
 }
 
 

@@ -97,7 +97,7 @@ function novoServico(event) {
                             timerProgressBar: true
                         });
                         setTimeout(() => {
-                            window.location.href = "/setores/editar/" + dados.id;
+                            window.location.href = "/servicos/editar/" + dados.id;
                         }, 500);
                     } else {
                         Swal.fire({

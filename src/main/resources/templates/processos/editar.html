@@ -130,7 +130,7 @@
                                 <div>
                                     <label for="id" class="form-label mt-4">ID</label>
                                     <input type="text" class="form-control" id="id" name="id"
-                                        placeholder="ID do processo" th:value="${processo.uuid}" readonly></input>
+                                        placeholder="ID do processo" th:value="${processo.uuid}" readonly>
                                 </div>
                                 <div>
                                     <label for="departamentoID" class="form-label mt-4">Departamento</label>
@@ -154,20 +154,15 @@
                                 </div>
                                 <div>
                                     <label for="solicitanteID" class="form-label mt-4">Solicitante</label>
-                                    <select class="form-select" id="solicitanteID" name="solicitanteID" required
-                                        style="width: 100%;" readonly="">
-                                        <option value="disabled" disabled selected>Selecione um Solicitante</option>
-                                        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}"
-                                            th:text="${usuario.name + '   ' + usuario.cpfCnpj}"
-                                            th:selected="${usuario.requrente.contains(processo)}">
-                                        </option>
-                                    </select>
+                                    <input type="text" class="form-control" id="solicitanteID" name="id"
+                                           placeholder="Solicitante" th:value="${usuario.name}" readonly>
+
                                 </div>
                                 <div>
                                     <label for="descricao" class="form-label mt-4">Descricao</label>
                                     <textarea type="text" class="form-control" id="descricao" name="descricao"
-                                        placeholder="Descricao do Setor" autocomplete="off" maxlength="255" required
-                                        th:text="${processo.descricao}" th:value="${processo.descricao}"></textarea>
+                                        placeholder="Descricao do Setor" autocomplete="off" maxlength="3000" required
+                                        th:text="${processo.descricao}" th:value="${processo.descricao}" rows="6"></textarea>
                                 </div>
                                 <div class="d-flex justify-content-end m-3">
                                     <a href="/processos/analise" class="btn btn-danger btn-sm m-2">Cancelar</a>
@@ -286,10 +281,6 @@
     <script th:src="@{/js/file.js}"></script>
     <script>
         $("#servicoID").select2({
-            theme: "bootstrap-5",
-            language: "pt-BR"
-        });
-        $("#solicitanteID").select2({
             theme: "bootstrap-5",
             language: "pt-BR"
         });

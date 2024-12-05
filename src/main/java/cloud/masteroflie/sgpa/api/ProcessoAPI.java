@@ -55,4 +55,15 @@ public class ProcessoAPI {
             return ResponseEntity.ok(msg);
         }
     }
+    @PutMapping("editar")
+    public ResponseEntity<Map<String, String>> editarProcesso(@RequestBody ProcessoDTO processoDTO, Authentication authentication) {
+        Map<String, String> msg = new HashMap<>();
+        try {
+            msg.put("OK", processoService.editarProcesso(processoDTO, authentication));
+            return ResponseEntity.ok(msg);
+        } catch (Exception e) {
+            msg.put("Error", e.getMessage());
+            return ResponseEntity.ok(msg);
+        }
+    }
 }

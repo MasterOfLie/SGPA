@@ -83,8 +83,8 @@
                 <div>
                     <label for="descricao" class="form-label mt-4">Descricao</label>
                     <textarea type="text" class="form-control" id="descricao" name="descricao"
-                              placeholder="Descricao do Setor" autocomplete="off" maxlength="255" required
-                              th:text="${processo.descricao}" th:value="${processo.descricao}" readonly></textarea>
+                              placeholder="Descricao do Setor" autocomplete="off" required
+                              th:text="${processo.descricao}" th:value="${processo.descricao}" rows="10" readonly></textarea>
                 </div>
             </div>
             <div class="tab-pane fade" id="anexo" role="tabpanel">

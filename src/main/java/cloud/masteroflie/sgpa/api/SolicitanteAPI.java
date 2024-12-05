@@ -33,6 +33,7 @@ public class SolicitanteAPI {
     }
     @PutMapping("/dados")
     public ResponseEntity<Map<String, String>> atualizarSolicitante(@RequestBody Usuario usuario, Authentication authentication) {
+        System.out.println(usuario.getCpfCnpj() + "      " +  usuario.getEmail());
         Map<String, String> msg = new HashMap<>();
         try{
             usuarioService.atualizarSolicitante(usuario, authentication);

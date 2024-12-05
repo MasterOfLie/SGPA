@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     Usuario findByEmail(String email);
     Usuario findByCpfCnpj(String cpfCnpj);
+    Boolean existsByCpfCnpj(String cpfCnpj);
+    Boolean existsByEmail(String email);
     List<Usuario> findAllByPerfil(Perfil perfil);
 
 }

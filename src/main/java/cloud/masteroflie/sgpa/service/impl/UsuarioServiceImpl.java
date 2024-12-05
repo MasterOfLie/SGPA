@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static cloud.masteroflie.sgpa.controllers.AuthController.isFirstAccess;
 
@@ -125,24 +123,31 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void atualizarSolicitante(Usuario usuario, Authentication authentication) throws Exception {
         if(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_REQUESTER_EDIT"))){
             Usuario solicitante = usuarioRepository.findById(usuario.getId()).orElseThrow(() -> new Exception("Usuario nao encontrado"));
-            if(usuarioRepository.findByEmail(usuario.getEmail()).equals(usuario.getEmail())){
-                if(usuarioRepository.findByCpfCnpj(usuario.getCpfCnpj()).equals(usuario.getCpfCnpj())){
-                    solicitante.setName(usuario.getName());
-                    solicitante.setCpfCnpj(usuario.getCpfCnpj());
-                    solicitante.setTelefone(usuario.getTelefone());
-                    solicitante.setEmail(usuario.getEmail());
-                    solicitante.setCep(usuario.getCep());
-                    solicitante.setCidade(usuario.getCidade());
-                    solicitante.setBairro(usuario.getBairro());
-                    solicitante.setLogradouro(usuario.getLogradouro());
-                    solicitante.setEstado(usuario.getEstado());
-                    usuarioRepository.save(solicitante);
-                }else {
-                    throw new Exception("Já exite um usuario com esse CPF/CNPJ.");
+            if (usuarioRepository.existsByCpfCnpj(usuario.getCpfCnpj())) {
+                if(!usuarioRepository.findByCpfCnpj(usuario.getCpfCnpj()).getId().equals(usuario.getId())){
+                    throw new Exception("Já existe um usuario com esse CPF/CNPJ.");
                 }
-            }else {
-                throw new Exception("Já exite um usuario com esse Email.");
             }
+            if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+                if(!usuarioRepository.findByEmail(usuario.getEmail()).getId().equals(usuario.getId())){
+                    throw new Exception("Já existe um usuario com esse Email.");
+                }
+            }
+            if (solicitante.getId().equals(usuario.getId())) {
+                solicitante.setName(usuario.getName());
+                solicitante.setCpfCnpj(usuario.getCpfCnpj());
+                solicitante.setTelefone(usuario.getTelefone());
+                solicitante.setEmail(usuario.getEmail());
+                solicitante.setCep(usuario.getCep());
+                solicitante.setCidade(usuario.getCidade());
+                solicitante.setBairro(usuario.getBairro());
+                solicitante.setLogradouro(usuario.getLogradouro());
+                solicitante.setEstado(usuario.getEstado());
+                usuarioRepository.save(solicitante);
+            }else {
+                throw new Exception("Dados incorretos");
+            }
+
         }else {
             throw new Exception("Você não possui permissão para alterar solicitante.");
         }
@@ -152,4 +157,5 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Long countUsuarios() {
         return usuarioRepository.count();
     }
+
 }

@@ -20,4 +20,5 @@ public interface ProcessoService {
     void movimentarProcesso(MovimentacaoDTO movimentacaoDTO, Authentication authentication) throws Exception;
     String alterarStatus(ProcessoDTO processoDTO, Authentication authentication) throws Exception;
     Processo criarProcessoPortal(ProcessoPortalDTO processoPortalDTO, Authentication authentication) throws Exception;
+    String editarProcesso(ProcessoDTO processoDTO, Authentication authentication) throws Exception;
 }

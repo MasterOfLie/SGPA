@@ -64,7 +64,6 @@
                     <tr>
                         <th class="text-center">Protocolo</th>
                         <th class="text-center">Serviço</th>
-                        <th class="text-center">Descrição</th>
                         <th class="text-center">Departamento</th>
                         <th class="text-center">Solicitante</th>
                         <th class="text-center">Status</th>
@@ -76,7 +75,6 @@
                     <tr>
                         <th class="text-center">Protocolo</th>
                         <th class="text-center">Serviço</th>
-                        <th class="text-center">Descrição</th>
                         <th class="text-center">Departamento</th>
                         <th class="text-center">Solicitante</th>
                         <th class="text-center">Status</th>
@@ -88,7 +86,6 @@
                     <tr class="selecionar" th:each="processo : ${processos}" th:data-uuid="${processo.uuid}">
                         <td class="text-center" th:text="${processo.protocolo + '/' + processo.vigencia}"></td>
                         <td class="text-center" th:text="${processo.getServico().nome}"></td>
-                        <td class="text-center" th:text="${processo.descricao}"></td>
                         <td class="text-center" th:text="${processo.departamento.nome}"></td>
                         <td class="text-center" th:text="${processo.getRequerente().name}"></td>
                         <td class="text-center">

@@ -148,4 +148,16 @@ public class ProcessoServiceImpl implements ProcessoService {
         processo.setServico(servico);
         return processoRepository.save(processo);
     }
+
+    @Override
+    public String editarProcesso(ProcessoDTO processoDTO, Authentication authentication) throws Exception{
+        Processo processo = (Processo) processoRepository.findByUuid(processoDTO.getProcessoID());
+        Departamento departamento = (Departamento) departamentoRepository.findById(processoDTO.getDepartamentoID()).orElseThrow(() -> new Exception("Departamento nao Encontrado"));
+        Servico servico = (Servico) servicoRepository.findById(processoDTO.getServicoID()).orElseThrow(() -> new Exception("Serviço nao Encontrado"));
+        processo.setDescricao(processoDTO.getDescricao());
+        processo.setDepartamento(departamento);
+        processo.setServico(servico);
+        processoRepository.save(processo);
+        return "Processo editado com sucesso";
+    }
 }
