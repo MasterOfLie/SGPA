@@ -144,7 +144,7 @@
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     <button type="button" class="btn btn-sm"
-                                                        onclick="downloadArquivo(this)" th:value="${arquivo.id}">
+                                                            onclick="downloadArquivo(this)" th:value="${arquivo.id}">
                                                         <i class="bi bi-eye"></i>
                                                     </button>
                                                 </div>
@@ -162,6 +162,7 @@
         </main>
     </section>
     <div th:replace="~{layout :: scripts}"></div>
+    <script th:src="@{/js/processo.js}"></script>
 </body>
 
 </html>

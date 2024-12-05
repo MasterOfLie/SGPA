@@ -127,13 +127,9 @@
                             <td th:text="${arquivo.getUsuario().name}"></td>
                             <td>
                                 <div class="d-flex justify-content-center">
-                                    <button th:if="${arquivo.usuario.id.equals(usuario.id)}" type="button" class="btn btn-sm"
+                                    <button th:if="${arquivo.usuario.id.equals(usuario.id) and arquivo.acessoExterno}" type="button" class="btn btn-sm"
                                             onclick="downloadArquivo(this)" th:value="${arquivo.id}">
                                         <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button th:if="${arquivo.usuario.id.equals(usuario.id)}" type="button" class="btn btn-sm"
-                                            onclick="deleteFile(this)" th:value="${arquivo.id}">
-                                        <i class="bi bi-trash text-danger"></i>
                                     </button>
                                 </div>
                             </td>
